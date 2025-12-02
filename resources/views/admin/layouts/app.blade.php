@@ -143,7 +143,7 @@ input, textarea, select {
     <h4>پنل مدیریت</h4>
     <hr>
 
-    <a href="{{ route('admin.dashboard') }}">🏠 داشبورد</a>
+    {{-- <a href="{{ route('admin.dashboard') }}">🏠 داشبورد</a> --}}
     <a href="{{ route('admin.cafe-header.edit') }}">📝 ویرایش هدر</a>
     <a href="{{ route('admin.cafe.categories.index') }}">📂 دسته‌بندی‌ها</a>
     <a href="{{ route('admin.cafe.items.index') }}">🍽 آیتم‌های منو</a>
