@@ -15,7 +15,8 @@
 body {
     background: var(--body-background);
     color: var(--body-text-color);
-    font-family: var(--font-family);
+    --font-family: "{{ setting('font_family', "'Vazirmatn', 'Tajawal', 'Cairo'") }}";
+
 }
 
 .nav-btn.active {

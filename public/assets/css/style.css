@@ -438,13 +438,6 @@ body {
     font-size: 1.2rem;
 }
 
-/* Footer */
-.cafe-footer {
-    background: linear-gradient(135deg, #ff4400 0%, #6d4c41 100%);
-    color: rgb(0, 0, 0);
-    margin-top: 4rem;
-}
-
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
