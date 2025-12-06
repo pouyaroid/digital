@@ -23,22 +23,29 @@ class CafeHeaderController extends Controller
 
     // ایجاد اولین هدر (store)
     public function store(Request $request)
-    {
-        $request->validate([
-            'cafe_name' => 'required|string|max:255',
-            'cafe_tagline' => 'nullable|string|max:255',
-            'coffee_emoji' => 'nullable|string|max:10',
-        ]);
+{
+    $request->validate([
+        'cafe_name' => 'required|string|max:255',
+        'cafe_tagline' => 'nullable|string|max:255',
+        'coffee_emoji' => 'nullable|string|max:10',
+        'logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:2048',
+    ]);
 
-        // اگر از قبل هدر وجود داشت، اجازه ساخت دوباره نده
-        if (CafeHeader::exists()) {
-            return back()->with('error', 'هدر از قبل وجود دارد، فقط می‌توانید ویرایش کنید.');
-        }
-
-        CafeHeader::create($request->all());
-
-        return back()->with('success', 'هدر با موفقیت ایجاد شد');
+    if (CafeHeader::exists()) {
+        return back()->with('error', 'هدر از قبل وجود دارد، فقط می‌توانید ویرایش کنید.');
     }
+
+    $data = $request->all();
+
+    if ($request->hasFile('logo')) {
+        $data['logo'] = $request->logo->store('cafe/logo', 'public');
+    }
+
+    CafeHeader::create($data);
+
+    return back()->with('success', 'هدر با موفقیت ایجاد شد');
+}
+
 
     // ویرایش هدر (update)
     public function update(Request $request)
@@ -47,12 +54,21 @@ class CafeHeaderController extends Controller
             'cafe_name' => 'required|string|max:255',
             'cafe_tagline' => 'nullable|string|max:255',
             'coffee_emoji' => 'nullable|string|max:10',
+            'logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:2048',
         ]);
-
+    
         $header = CafeHeader::first() ?? new CafeHeader();
-        $header->fill($request->all());
+    
+        $header->cafe_name = $request->cafe_name;
+        $header->cafe_tagline = $request->cafe_tagline;
+        $header->coffee_emoji = $request->coffee_emoji;
+    
+        if ($request->hasFile('logo')) {
+            $header->logo = $request->logo->store('cafe/logo', 'public');
+        }
+    
         $header->save();
-
+    
         return back()->with('success', 'هدر با موفقیت ویرایش شد');
     }
 

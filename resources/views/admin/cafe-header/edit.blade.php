@@ -4,7 +4,7 @@
 
 <h3 class="mb-4">ویرایش هدر</h3>
 
-<form method="POST" action="{{ route('cafe-header.update') }}" class="glass-card p-4">
+<form method="POST" action="{{ route('cafe-header.update') }}" class="glass-card p-4" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -58,6 +58,22 @@
                 </div>
             </div>
         </div>
+
+        {{-- لوگو --}}
+        <div class="col-md-6">
+            <label>لوگوی کافه</label>
+            <input type="file" name="logo" class="form-control glass-input">
+
+            @if(!empty($header?->logo))
+                <div class="mt-3">
+                    <p class="mb-1">لوگوی فعلی:</p>
+                    <img src="{{ asset('storage/' . $header->logo) }}"
+                         alt="لوگو کافه"
+                         style="width:100px; height:100px; object-fit:cover; border-radius:12px; border:2px solid #ddd;">
+                </div>
+            @endif
+        </div>
+
     </div>
 
     <button class="btn btn-primary mt-3">ذخیره</button>
@@ -72,13 +88,24 @@
 </form>
 @endif
 
-{{-- استایل شیشه‌ای --}}
+{{-- استایل --}}
 <style>
-
-
     .emoji-item {
         font-size: 26px;
         cursor: pointer;
+    }
+
+    #emojiPicker {
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        position: absolute;
+        width: 260px;
+        max-height: 200px;
+        overflow-y: scroll;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        z-index: 20;
+        display: none;
     }
 </style>
 
@@ -87,13 +114,11 @@
     const emojiInput = document.getElementById("emojiInput");
     const emojiPicker = document.getElementById("emojiPicker");
 
-    // باز/بسته شدن پنل
     emojiInput.addEventListener("click", () => {
         emojiPicker.style.display =
             emojiPicker.style.display === "none" ? "block" : "none";
     });
 
-    // انتخاب ایموجی
     document.querySelectorAll(".emoji-item").forEach(item => {
         item.addEventListener("click", () => {
             emojiInput.value = item.textContent.trim();
@@ -101,7 +126,6 @@
         });
     });
 
-    // بستن هنگام کلیک خارج
     document.addEventListener("click", e => {
         if (!emojiPicker.contains(e.target) && !emojiInput.contains(e.target)) {
             emojiPicker.style.display = "none";

@@ -42,7 +42,7 @@ Route::prefix('admin/cafe')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard با QR Code
-    Route::get('/admin', function () {
+    Route::get('/', function () {
         $url = url('/');
     
         $builder = new Builder(
@@ -84,5 +84,5 @@ Route::post('/admin/settings', [SettingController::class, 'update']);
 // Dynamic CSS
 Route::get('/dynamic-style.css', function () {
     return response()->view('dynamic-style')->header('Content-Type', 'text/css');
-    
+
 });

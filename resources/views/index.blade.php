@@ -18,16 +18,27 @@
 </head>
 <body>
     <div class="header-banner">
+        
         <div class="cafe-info">
+
+            {{-- لوگو --}}
+            @if(!empty($header->logo))
+                <div class="cafe-logo">
+                    <img src="{{ asset('storage/' . $header->logo) }}" alt="لوگو کافه">
+                </div>
+            @endif
+
+            {{-- نام کافه --}}
             <h1 class="cafe-name">
                 {{ $header->cafe_name ?? 'کافه بدون نام' }}
             </h1>
-    
+
+            {{-- توضیح کافه --}}
             <p class="cafe-tagline">
                 {{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}
             </p>
         </div>
-    
+
         <div class="header-design">
             <div class="coffee-steam">
                 {{ $header->coffee_emoji ?? '☕' }}
