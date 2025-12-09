@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CafeHeaderController;
 use App\Http\Controllers\CafeItemController;
 use App\Http\Controllers\ContactSectionController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SettingController;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
@@ -74,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
             $svg = $result->getString();
 
             return view('admin.dashboard', ['qr' => $svg]);
-        })->name('admin.dashboard');
+        })->name('dashboard');
 
         Route::get('/cafe-header', [CafeHeaderController::class, 'edit'])
             ->name('cafe-header.edit');
@@ -98,6 +99,28 @@ Route::middleware(['auth'])->group(function () {
     // تنظیمات
     Route::get('/admin/settings', [SettingController::class, 'index']);
     Route::post('/admin/settings', [SettingController::class, 'update']);
+    // لیست مشتری‌ها
+Route::get('/customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+
+// فرم ایجاد مشتری
+Route::get('/customers/create', [CustomerController::class, 'create'])->name('admin.customers.create');
+
+// ذخیره مشتری جدید
+Route::post('/customers', [CustomerController::class, 'store'])->name('admin.customers.store');
+
+// نمایش جزئیات یک مشتری (اختیاری)
+Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('admin.customers.show');
+
+// فرم ویرایش مشتری
+Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('admin.customers.edit');
+
+// ذخیره تغییرات مشتری
+Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('admin.customers.update');
+
+// حذف مشتری
+Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('admin.customers.destroy');
+
+
 
   
  
@@ -106,3 +129,4 @@ Route::get('/dynamic-style.css', function () {
     return response()->view('dynamic-style')
         ->header('Content-Type', 'text/css');
 });
+
