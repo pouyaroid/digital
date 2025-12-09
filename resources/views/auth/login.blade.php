@@ -14,6 +14,7 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #0c0a5b 50%, #0f3460 100%);
             min-height: 100vh;
             font-family: 'Vazir', sans-serif;
+            
         }
         
         .glass-morphism {
