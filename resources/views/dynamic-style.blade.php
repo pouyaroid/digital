@@ -35,5 +35,6 @@ body {
 footer {
     background: var(--footer-gradient);
     color: var(--footer-text-color);
+  
 }
 
