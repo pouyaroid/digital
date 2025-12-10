@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Services\SmsService;
 
 class CustomerController extends Controller
 {
+    protected $smsService;
+
+    public function __construct(SmsService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+
     public function index()
     {
         $customers = Customer::latest()->paginate(10);
@@ -52,8 +60,31 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $customer->delete();
-
         return redirect()->route('admin.customers.index')
             ->with('success', 'مشتری حذف شد.');
+    }
+
+    // فرم ارسال پیامک گروهی
+    public function smsForm()
+    {
+        $customers = Customer::all(); // تمام مشتریان برای انتخاب
+        return view('admin.customers.sms', compact('customers'));
+    }
+
+    // ارسال پیامک گروهی
+    public function sendSms(Request $request)
+    {
+        $request->validate([
+            'mobiles' => 'required|array',
+            'mobiles.*' => 'required|string',
+            'message' => 'required|string|max:500',
+        ]);
+
+        $mobiles = $request->mobiles;
+        $message = $request->message;
+
+        $response = $this->smsService->sendGroup($mobiles, $message);
+
+        return redirect()->back()->with('success', 'پیامک‌ها ارسال شدند.');
     }
 }

@@ -109,7 +109,7 @@ Route::get('/customers/create', [CustomerController::class, 'create'])->name('ad
 Route::post('/customers', [CustomerController::class, 'store'])->name('admin.customers.store');
 
 // نمایش جزئیات یک مشتری (اختیاری)
-Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('admin.customers.show');
+// Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('admin.customers.show');
 
 // فرم ویرایش مشتری
 Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('admin.customers.edit');
@@ -120,7 +120,12 @@ Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name
 // حذف مشتری
 Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('admin.customers.destroy');
 
+Route::get('/customers/sms', [CustomerController::class, 'smsForm'])
+    ->name('admin.customers.smsForm');
 
+// پردازش و ارسال پیامک
+Route::post('/customers/sms/send', [CustomerController::class, 'sendSms'])
+    ->name('admin.customers.sendSms');
 
   
  
