@@ -86,30 +86,30 @@
                     <div style="padding: 15px; display:flex; flex-direction: column; gap:10px; align-items:center; justify-content:center;">
                         
                         {{-- نام آیتم --}}
-                        <h3 style="font-size: 18px; margin:0; font-weight:bold;">{{ $item->name }}</h3>
+                        <h3 style="font-size: 22px; margin:0; font-weight:bold;">{{ $item->name }}</h3>
     
                         {{-- تگ‌ها با ایموجی --}}
                         @if($item->tags)
-                            <p style="margin:0; font-size: 12px; color:#0d00ff;">
+                            <p style="margin:0; font-size: 15px; color:#0d00ff;">
                                 🏷️ {{ str_replace(',', ' • ', $item->tags) }}
                             </p>
                         @endif
     
                         {{-- توضیحات --}}
                         @if($item->description)
-                            <p style="margin:0; font-size: 14px; color:#000000;">{{ $item->description }}</p>
+                            <p style="margin:0; font-size: 16px; color:#000000;">{{ $item->description }}</p>
                         @endif
     
                         {{-- کالری --}}
                         @if($item->calories)
-                            <p style="margin:0; font-size: 12px; color:#000000;">🔥 {{ $item->calories }} کالری</p>
+                            <p style="margin:0; font-size: 14px; color:#000000;">🔥 {{ $item->calories }} کالری</p>
                         @endif
     
                         {{-- قیمت --}}
                         <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:5px; flex-wrap: wrap;">
                             @if($item->discount_price)
                                 <span style="text-decoration: line-through; color:#000000;">{{ number_format($item->price) }} تومان</span>
-                                <span style="color:#e74c3c; font-weight:bold; font-size:16px;">{{ number_format($item->discount_price) }} تومان</span>
+                                <span style="color:#e74c3c; font-weight:bold; font-size:18px;">{{ number_format($item->discount_price) }} تومان</span>
                             @else
                                 <span style="font-weight:bold; font-size:16px;">{{ number_format($item->price) }} تومان</span>
                             @endif
