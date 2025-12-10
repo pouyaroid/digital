@@ -4,7 +4,7 @@
 
 <h3 class="mb-4">ویرایش هدر</h3>
 
-<form method="POST" action="{{ route('cafe-header.update') }}" class="glass-card p-4" enctype="multipart/form-data">
+<form method="POST" action="{{ route('admin.cafe-header.update') }}" class="glass-card p-4" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 

@@ -4,7 +4,7 @@
 
 <h3 class="mb-4">ویرایش بخش تماس با ما</h3>
 
-<form action="{{ route('contact.update') }}" method="POST" class="glass-card p-4">
+<form action="{{ route('admin.contact.update') }}" method="POST" class="glass-card p-4">
     @csrf
     @method('PUT')
 

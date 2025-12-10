@@ -143,12 +143,15 @@ input, textarea, select {
     <h4>پنل مدیریت</h4>
     <hr>
 
-    <a href="{{ route('admin.dashboard') }}">ًQrcode</a>
+    <a href="{{ route('admin.dashboard') }}">� QRCode</a>
     <a href="{{ route('admin.cafe-header.edit') }}">📝 ویرایش هدر</a>
     <a href="{{ route('admin.cafe.categories.index') }}">📂 دسته‌بندی‌ها</a>
     <a href="{{ route('admin.cafe.items.index') }}">🍽 آیتم‌های منو</a>
     <a href="{{ route('admin.contact.edit') }}">📞 بخش تماس</a>
     <a href="{{ route('admin.customers.index') }}">👥 مشتریان</a>
+    <a href="{{ route('admin.settings.index') }}">⚙️ تنظیمات استایل</a>
+
+    
     
 </div>
 
