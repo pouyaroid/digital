@@ -81,7 +81,7 @@
 
 {{-- فرم حذف --}}
 @if($header)
-<form method="POST" action="{{ route('cafe-header.destroy') }}" class="mt-3 glass-card p-3">
+<form method="POST" action="{{ route('admin.cafe-header.destroy') }}" class="mt-3 glass-card p-3">
     @csrf
     @method('DELETE')
     <button class="btn btn-danger">حذف هدر</button>
