@@ -89,6 +89,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::post('/categories', [CafeCategoryController::class, 'store'])
         ->name('cafe.categories.store');
+    Route::delete('categories/delete/{id}',[CafeCategoryController::class,'destroy'])
+        ->name('categories.destroy'); 
+        
+    
 
 
 

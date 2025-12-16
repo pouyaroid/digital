@@ -25,4 +25,9 @@ class CafeCategoryController extends Controller
 
         return back()->with('success', 'دسته‌بندی جدید اضافه شد');
     }
+    public function destroy($id){
+        $category=CafeCategory::Find($id);
+        $category->delete();
+        return redirect()->route('admin.cafe.categories.index');
+    }
 }

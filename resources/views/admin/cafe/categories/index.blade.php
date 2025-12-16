@@ -69,6 +69,7 @@
                 <th>آیکن</th>
                 <th>نام</th>
                 <th>ترتیب</th>
+                <th width="120">عملیات</th> {{-- ستون عملیات --}}
             </tr>
         </thead>
         <tbody>
@@ -77,6 +78,18 @@
                     <td style="font-size:24px; text-align:center;">{{ $cat->icon }}</td>
                     <td>{{ $cat->name }}</td>
                     <td>{{ $cat->order }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            {{-- حذف --}}
+                            <form action="{{ route('admin.categories.destroy', $cat->id) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('آیا مطمئن هستید که می‌خواهید حذف کنید؟')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">حذف</button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
