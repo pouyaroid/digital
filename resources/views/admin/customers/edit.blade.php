@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">ویرایش مشتری</h1>
+    <h1 class="mb-4 text-center">ویرایش مشتری</h1>
 
     <form action="{{ route('admin.customers.update', $customer->id) }}" method="POST">
         @csrf

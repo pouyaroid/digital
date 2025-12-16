@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<h2>ارسال پیامک به مشتریان</h2>
+<h2 class="mb-4 text-center">ارسال پیامک به مشتریان</h2>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>

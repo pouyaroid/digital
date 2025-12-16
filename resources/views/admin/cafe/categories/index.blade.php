@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<h3 class="mb-4">مدیریت دسته‌بندی‌ها</h3>
+<h3 class="mb-4 text-center">مدیریت دسته‌بندی‌ها</h3>
 
 @if(session('success'))
     <div class="alert alert-success glass-card p-2">{{ session('success') }}</div>

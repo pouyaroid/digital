@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 class="mb-4">مدیریت آیتم‌های منو</h3>
+<h3 class="mb-4 text-center">مدیریت آیتم‌های منو</h3>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>

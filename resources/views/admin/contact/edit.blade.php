@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 class="mb-4">ویرایش بخش تماس با ما</h3>
+<h3 class="mb-4 text-center">ویرایش بخش تماس با ما</h3>
 
 <form action="{{ route('admin.contact.update') }}" method="POST" class="glass-card p-4">
     @csrf
