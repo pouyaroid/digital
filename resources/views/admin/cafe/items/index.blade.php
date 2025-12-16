@@ -75,31 +75,57 @@
 <hr>
 
 {{-- جدول آیتم‌ها --}}
+{{-- جدول آیتم‌ها --}}
 <div class="glass-card p-3">
-    <table class="table table-bordered mb-0">
+    <table class="table table-bordered mb-0 align-middle">
         <thead>
             <tr>
                 <th>عکس</th>
                 <th>نام</th>
                 <th>قیمت</th>
                 <th>دسته</th>
+                <th width="180">عملیات</th>
             </tr>
         </thead>
         <tbody>
             @foreach($items as $item)
                 <tr>
-                    <td><img src="/storage/{{ $item->image }}" width="60"></td>
+                    <td>
+                        @if($item->image)
+                            <img src="/storage/{{ $item->image }}" width="60">
+                        @endif
+                    </td>
+
                     <td>{{ $item->name }}</td>
+
                     <td>{{ number_format($item->price) }} تومان</td>
+
                     <td>{{ $item->category->name }}</td>
+
+                    {{-- ⬇️ فقط این قسمت اصلاح شده --}}
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.cafe.items.edit', $item->id) }}"
+                               class="btn btn-warning btn-sm">
+                                ویرایش
+                            </a>
+
+                            <form action="{{ route('admin.cafe.items.destroy', $item->id) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('حذف شود؟')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">
+                                    حذف
+                                </button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </div>
-
-
-
 
 
 @endsection

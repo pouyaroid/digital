@@ -98,6 +98,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::post('/items', [CafeItemController::class, 'store'])
         ->name('cafe.items.store');
+    Route::delete('/items/{id}',[CafeItemController::class,'destroy'])
+        ->name('cafe.items.destroy');
+    Route::put('/items/{id}',[CafeItemController::class,'update'])
+        ->name('cafe.items.update');
+        
+    Route::get('/items/edit/{id}',[CafeItemController::class,'edit'])
+        ->name('cafe.items.edit');
 
 
 
