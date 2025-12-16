@@ -8,7 +8,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-<form action="{{ route('cafe.items.update', $item->id) }}"
+<form action="{{ route('admin.cafe.items.update', $item->id) }}"
       method="POST"
       enctype="multipart/form-data"
       class="card p-4 glass-card">
