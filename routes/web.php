@@ -10,6 +10,9 @@ use App\Http\Controllers\CafeItemController;
 use App\Http\Controllers\ContactSectionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SettingController;
+use App\Models\Address;
+
+use App\Models\Customer;
 
 // Fortify
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -20,7 +23,11 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
 use Endroid\QrCode\RoundBlockSizeMode;
-
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\AdminController;
+use Symfony\Component\HttpFoundation\Request;
 
 // ---------------- Public Routes (No middleware) ----------------
 
@@ -157,5 +164,30 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::post('/customers/sms/send', [CustomerController::class, 'sendSms'])
         ->name('customers.sendSms');
-
+       
+     
 });
+// صفحه checkout
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
+// ذخیره سفارش
+Route::post('/order', [OrderController::class, 'store'])->name('order.submit');
+
+// ذخیره آدرس جدید
+Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
+
+// گرفتن آدرس‌ها بر اساس شماره موبایل
+
+Route::get('/addresses/by-phone', [AddressController::class, 'byPhone']);
+// صفحه checkout
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
+// ثبت سفارش نهایی
+Route::post('/order/submit', [OrderController::class, 'store'])->name('order.submit');
+
+// گرفتن آدرس‌ها بر اساس شماره موبایل (AJAX)
+Route::get('/addresses/by-phone', [AddressController::class, 'byPhone'])->name('address.byPhone');
+
+// ثبت آدرس جدید (AJAX)
+Route::post('/addresses/store', [AddressController::class, 'store'])->name('address.store');
+Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
