@@ -1269,3 +1269,68 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* wrapper تعداد */
+.qty-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* دکمه + و - */
+.increase-btn,
+.decrease-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.decrease-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.increase-btn:hover,
+.decrease-btn:hover {
+    transform: scale(1.1);
+}
+
+.increase-btn:active,
+.decrease-btn:active {
+    transform: scale(0.95);
+}
+
+/* عدد */
+.quantity {
+    min-width: 28px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #111827;
+}
+
+/* دکمه افزودن به سبد */
+.add-to-cart-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.add-to-cart-btn:hover {
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35);
+    transform: translateY(-2px);
+}

@@ -29,10 +29,6 @@
 </head>
 <body>
     {{-- سبد خرید شناور --}}
-    <div id="floatingCart">
-        🛒 سبد خرید: <span id="cartCount">0</span> آیتم
-        <button id="checkoutBtn" style="margin-left:10px; padding:5px 10px; border:none; background:#27ae60; color:white; border-radius:5px;">ثبت نهایی</button>
-    </div>
 
     {{-- هدر کافه --}}
     <div class="header-banner">
@@ -48,6 +44,10 @@
         <div class="header-design">
             <div class="coffee-steam">{{ $header->coffee_emoji ?? '☕' }}</div>
         </div>
+    </div>
+    <div id="floatingCart">
+        <span>🛒 سبد خرید: <strong id="cartCount">0</strong> آیتم</span>
+        <button id="checkoutBtn">ثبت نهایی</button>
     </div>
 
     {{-- ناوبری دسته‌ها --}}
@@ -102,18 +102,23 @@
                     </div>
 
                     {{-- تعداد و دکمه‌ها --}}
-                    <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin-top:10px;">
-                        <button class="decrease-btn" data-id="{{ $item->id }}">-</button>
-                        <span class="quantity" id="qty-{{ $item->id }}">1</span>
-                        <button class="increase-btn" data-id="{{ $item->id }}">+</button>
-                    </div>
-                    <button class="add-to-cart-btn" data-id="{{ $item->id }}" 
-                            data-name="{{ $item->name }}"
-                            data-price="{{ $item->discount_price ?? $item->price }}">
-                        افزودن به سبد خرید
-                    </button>
-                </div>
-            </div>
+                    
+<div class="qty-box">
+    <button class="increase-btn" data-id="{{ $item->id }}">+</button>
+
+    <span class="quantity" id="qty-{{ $item->id }}">1</span>
+
+    <button class="decrease-btn" data-id="{{ $item->id }}">-</button>
+</div>
+
+
+
+    <button class="add-to-cart-btn"
+        data-id="{{ $item->id }}"
+        data-name="{{ $item->name }}"
+        data-price="{{ $item->discount_price ?? $item->price }}">
+    افزودن به سبد خرید
+    </button>
             @endforeach
         </div>
     </main>

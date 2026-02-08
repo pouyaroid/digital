@@ -4,14 +4,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ثبت سفارش</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-body { font-family: Vazirmatn, sans-serif; padding: 20px; }
-.cart-item { display:flex; justify-content: space-between; padding:10px 0; border-bottom:1px solid #ddd; }
-.total { font-weight:bold; font-size:18px; margin-top:20px; }
-.form-group { margin-bottom:15px; display:flex; flex-direction:column; }
-input, select, button { padding:10px; border-radius:5px; border:1px solid #ccc; width:100%; box-sizing:border-box; }
-button { background:#27ae60; color:white; border:none; cursor:pointer; }
-#newAddressGroup { display:none; margin-top:10px; }
+:root {
+    --primary: #22c55e;
+    --primary-dark: #16a34a;
+    --bg: #f9fafb;
+    --card: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: 'Vazirmatn', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* container */
+.checkout-container {
+    max-width: 480px;
+    margin: auto;
+    background: var(--card);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+/* title */
+.checkout-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* cart items */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item span {
+    font-size: 14px;
+}
+
+.cart-item .price {
+    font-weight: 600;
+}
+
+/* total */
+.total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+/* form */
+.form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--muted);
+}
+
+input,
+select {
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(34,197,94,0.15);
+}
+
+/* new address */
+#newAddressGroup {
+    display: none;
+    margin-top: 10px;
+}
+
+/* submit button */
+button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(34,197,94,0.35);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* responsive */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .checkout-container {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .checkout-title {
+        font-size: 18px;
+    }
+}
 </style>
 </head>
 <body>
@@ -185,3 +324,5 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
+

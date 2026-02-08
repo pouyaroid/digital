@@ -191,3 +191,7 @@ Route::get('/addresses/by-phone', [AddressController::class, 'byPhone'])->name('
 // ثبت آدرس جدید (AJAX)
 Route::post('/addresses/store', [AddressController::class, 'store'])->name('address.store');
 Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+// در فایل routes/web.php
+
+
+Route::patch('/admin/orders/{order}/status', [Order::class, 'updateStatus'])->name('admin.orders.updateStatus');

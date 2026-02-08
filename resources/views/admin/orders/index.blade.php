@@ -1,66 +1,179 @@
 @extends('admin.layouts.app')
 
 @section('content')
+<!-- لود فونت وزیرمتن برای زیبایی متون فارسی -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+
 <style>
+    :root {
+        --primary-color: #27ae60; /* رنگ سبز اصلی */
+        --primary-hover: #219150;
+        --bg-color: #f3f4f6;
+        --card-bg: #ffffff;
+        --text-main: #1f2937;
+        --text-muted: #6b7280;
+        --border-color: #e5e7eb;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
     .orders-wrapper {
-        padding: 16px;
+        font-family: 'Vazirmatn', sans-serif;
+        padding: 24px;
+        background-color: var(--bg-color);
+        min-height: 100vh;
+        direction: rtl;
     }
 
+    /* Header Styles */
     .orders-header {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
     }
 
+    .orders-header h2 {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text-main);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Table Container (Card Style) */
+    .table-container {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden; /* برای گرد کردن گوشه‌ها */
+        border: 1px solid var(--border-color);
+    }
+
+    /* Table Styles */
     .orders-table {
         width: 100%;
         border-collapse: collapse;
-        background-color: #222222;
-        border-radius: 8px;
-        overflow: hidden;
+        text-align: right;
     }
 
     .orders-table thead {
-        background-color: #27ae60;
+        background-color: var(--primary-color);
         color: #fff;
     }
 
-    .orders-table th,
-    .orders-table td {
-        padding: 10px;
-        border-bottom: 1px solid #e5e7eb;
+    .orders-table th {
+        padding: 16px;
         font-size: 14px;
-        text-align: center;
-        vertical-align: top;
+        font-weight: 600;
         white-space: nowrap;
     }
 
-    .orders-table tbody tr:hover {
-        background-color: #f3f4f6;
+    .orders-table td {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-main);
+        font-size: 14px;
+        vertical-align: top;
     }
 
+    .orders-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .orders-table tbody tr:hover {
+        background-color: #f9fafb;
+        transition: background-color 0.2s;
+    }
+
+    /* Order Items List Styling */
     .order-items {
         list-style: none;
         padding: 0;
         margin: 0;
-        text-align: right;
-        white-space: normal;
     }
 
     .order-items li {
+        background-color: #f9fafb;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-bottom: 6px;
         font-size: 13px;
-        line-height: 1.6;
-        margin-bottom: 4px;
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #eee;
+    }
+    
+    .order-items li:last-child {
+        margin-bottom: 0;
     }
 
+    .item-name {
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    .item-detail {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+    }
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        display: block;
+        opacity: 0.5;
+    }
+
+    /* Pagination Styling (Override Bootstrap/Laravel Default) */
     .orders-pagination {
         margin-top: 24px;
         display: flex;
         justify-content: center;
+        gap: 5px;
+    }
+    
+    .orders-pagination a, 
+    .orders-pagination span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1px solid var(--border-color);
+        background-color: var(--card-bg);
+        color: var(--text-main);
     }
 
-    /* ================= MOBILE ================= */
+    .orders-pagination a:hover {
+        background-color: var(--bg-color);
+        border-color: var(--text-muted);
+    }
+
+    .orders-pagination .active span {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    /* ================= RESPONSIVE (MOBILE) ================= */
     @media (max-width: 768px) {
+        .orders-wrapper {
+            padding: 16px;
+        }
 
         .orders-table,
         .orders-table thead,
@@ -72,105 +185,147 @@
             width: 100%;
         }
 
+        /* مخفی کردن هدر جدول در موبایل */
         .orders-table thead {
             display: none;
         }
 
         .orders-table tr {
-            background: #151414;
-            margin-bottom: 16px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
-            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            overflow: hidden; /* برای اینکه سایز کارت از بیرون نزند */
         }
 
         .orders-table td {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 6px 0;
-            border: none;
-            white-space: normal;
             text-align: right;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            position: relative;
+            white-space: normal;
         }
 
         .orders-table td::before {
             content: attr(data-label);
-            font-weight: 600;
-            color: #6b7280;
-            margin-left: 10px;
-            white-space: nowrap;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-left: 12px;
+            min-width: 80px;
+        }
+
+        /* بهبود نمایش ستون آیتم‌ها در موبایل */
+        .orders-table td[data-label="آیتم‌ها"] {
+            display: block;
+            flex-direction: column;
+        }
+        
+        .orders-table td[data-label="آیتم‌ها"]::before {
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        /* استایل خاص برای اخرین کارت */
+        .orders-table tr:last-child {
+            margin-bottom: 0;
         }
     }
 </style>
 
 <div class="orders-wrapper">
 
-    <div class="orders-header">📦 لیست سفارشات</div>
+    <div class="orders-header">
+        <h2>📦 لیست سفارشات</h2>
+        <!-- می‌توانید دکمه فیلتر یا جستجو را اینجا اضافه کنید -->
+    </div>
 
     @if($orders->isEmpty())
-        <p>هیچ سفارشی ثبت نشده است.</p>
+        <div class="empty-state">
+            <span class="empty-icon">📭</span>
+            <p>هیچ سفارشی ثبت نشده است.</p>
+        </div>
     @else
-        <table class="orders-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>شماره سفارش</th>
-                    <th>شماره تماس</th>
-                    <th>آدرس</th>
-                    <th>آیتم‌ها</th>
-                    <th>تعداد</th>
-                    <th>جمع کل</th>
-                    <th>تاریخ</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach($orders as $order)
+        <div class="table-container">
+            <table class="orders-table">
+                <thead>
                     <tr>
-                        <td data-label="#"> 
+                        <th>#</th>
+                        <th>شماره سفارش</th>
+                        <th>شماره تماس</th>
+                        <th>آدرس</th>
+                        <th>آیتم‌ها</th>
+                        <th>تعداد کل</th>
+                        <th>جمع کل</th>
+                        <th>تاریخ</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($orders as $order)
+                    <tr>
+                        <td data-label="#">
                             {{ ($orders->currentPage() - 1) * $orders->perPage() + $loop->iteration }}
                         </td>
 
-                        <td data-label="شماره سفارش">{{ $order->id }}</td>
+                        <td data-label="شماره سفارش">
+                            <span style="font-family: sans-serif; font-weight: bold;">{{ $order->id }}</span>
+                        </td>
 
-                        <td data-label="شماره تماس">{{ $order->customer->phone ?? '-' }}</td>
+                        <td data-label="شماره تماس">
+                            {{ $order->customer->phone ?? '-' }}
+                        </td>
 
-                        <td data-label="آدرس">{{ $order->address->address ?? '-' }}</td>
+                        <td data-label="آدرس">
+                            <span style="max-width: 200px; display: block; overflow: hidden; text-overflow: ellipsis;">
+                                {{ $order->address->address ?? '-' }}
+                            </span>
+                        </td>
 
                         <td data-label="آیتم‌ها">
                             @if($order->items->isNotEmpty())
                                 <ul class="order-items">
                                     @foreach($order->items as $item)
                                         <li>
-                                            {{ $item->cafeItem->name ?? '---' }}
-                                            × {{ $item->quantity }}
-                                            =
-                                            {{ number_format($item->price * $item->quantity) }}
+                                            <span class="item-name">{{ $item->cafeItem->name ?? '---' }}</span>
+                                            <span class="item-detail">
+                                                {{ $item->quantity }} عدد
+                                                <span style="margin: 0 4px;">•</span>
+                                                {{ number_format($item->price * $item->quantity) }} تومان
+                                            </span>
                                         </li>
                                     @endforeach
                                 </ul>
                             @else
-                                -
+                                <span class="text-muted">-</span>
                             @endif
                         </td>
 
-                        <td data-label="تعداد">{{ $order->items->sum('quantity') }}</td>
+                        <td data-label="تعداد کل">
+                            {{ $order->items->sum('quantity') }}
+                        </td>
 
                         <td data-label="جمع کل">
-                            {{ number_format($order->total_price) }} تومان
+                            <strong style="color: var(--primary-color);">
+                                {{ number_format($order->total_price) }} <span style="font-size: 0.8em">تومان</span>
+                            </strong>
                         </td>
 
                         <td data-label="تاریخ">
-                            {{ $order->created_at->format('Y-m-d H:i') }}
+                            <small>{{ $order->created_at->format('Y-m-d H:i') }}</small>
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <div class="orders-pagination">
-            {{ $orders->links() }}
+            {{ $orders->appends(request()->query())->links() }}
         </div>
     @endif
 
