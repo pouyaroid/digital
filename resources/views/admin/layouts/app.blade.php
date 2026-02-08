@@ -239,6 +239,7 @@
     <hr>
 
     <a href="{{ route('admin.dashboard') }}" class="menu-item">📱 QRCode</a>
+    <a href="{{ route('admin.orders.index') }}" class="menu-item">📋 مشاهده سفارشات</a>
     <a href="{{ route('admin.cafe-header.edit') }}" class="menu-item">📝 ویرایش هدر</a>
     <a href="{{ route('admin.cafe.categories.index') }}" class="menu-item">📂 دسته‌بندی‌ها</a>
     <a href="{{ route('admin.cafe.items.index') }}" class="menu-item">🍽 آیتم‌های منو</a>
@@ -247,6 +248,7 @@
     <a href="{{ route('admin.settings.index') }}" class="menu-item">⚙️ تنظیمات استایل</a>
     <a href="{{ route('admin.customers.smsForm') }}" class="menu-item">✉️ ارسال SMS</a>
     <a href="{{ route('home') }}" class="menu-item">👀 مشاهده منو</a>
+    
 </div>
 
 <div class="content" id="content">

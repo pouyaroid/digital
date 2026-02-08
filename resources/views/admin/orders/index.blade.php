@@ -241,7 +241,6 @@
 
     <div class="orders-header">
         <h2>📦 لیست سفارشات</h2>
-        <!-- می‌توانید دکمه فیلتر یا جستجو را اینجا اضافه کنید -->
     </div>
 
     @if($orders->isEmpty())
@@ -261,6 +260,8 @@
                         <th>آیتم‌ها</th>
                         <th>تعداد کل</th>
                         <th>جمع کل</th>
+                        <!-- اضافه کردن ستون وضعیت -->
+                        <th>وضعیت</th>
                         <th>تاریخ</th>
                     </tr>
                 </thead>
@@ -314,6 +315,40 @@
                                 {{ number_format($order->total_price) }} <span style="font-size: 0.8em">تومان</span>
                             </strong>
                         </td>
+
+                        <!-- --- بخش جدید: ستون وضعیت و فرم تغییر --- -->
+                        <td data-label="وضعیت">
+                            <!-- تعیین کلاس رنگی بر اساس وضعیت -->
+                            @php
+                                $statusColor = match($order->status) {
+                                    'pending' => '#f59e0b', // نارنجی
+                                    'preparing' => '#3b82f6', // آبی
+                                    'sent' => '#8b5cf6', // بنفش
+                                    'delivered' => '#10b981', // سبز
+                                    'canceled' => '#ef4444', // قرمز
+                                    default => '#6b7280',
+                                };
+                            @endphp
+
+                            <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST" style="display: flex; align-items: center; gap: 5px;">
+                                @csrf
+                                @method('PATCH')
+                                
+                                <div style="display: flex; align-items: center; background: #f3f4f6; padding: 4px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                    <!-- نمایش رنگ وضعیت -->
+                                    <span style="width: 10px; height: 10px; border-radius: 50%; background-color: {{ $statusColor }}; display: inline-block; margin-left: 5px;"></span>
+                                    
+                                    <select name="status" onchange="this.form.submit()" style="border: none; background: transparent; padding: 2px; font-size: 0.9em; cursor: pointer; outline: none;">
+                                        <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>درحال پردازش</option>
+                                        <option value="preparing" {{ $order->status === 'preparing' ? 'selected' : '' }}>آماده‌سازی</option>
+                                        <option value="sent" {{ $order->status === 'sent' ? 'selected' : '' }}>ارسال شده</option>
+                                        <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>تحویل داده شد</option>
+                                        <option value="canceled" {{ $order->status === 'canceled' ? 'selected' : '' }}>لغو شده</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </td>
+                        <!-- --- پایان بخش جدید --- -->
 
                         <td data-label="تاریخ">
                             <small>{{ $order->created_at->format('Y-m-d H:i') }}</small>

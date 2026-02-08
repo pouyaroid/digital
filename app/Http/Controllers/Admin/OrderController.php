@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends Controller
 {
@@ -18,6 +19,21 @@ class OrderController extends Controller
 
         return view('admin.orders.index', compact('orders'));
     }
+   
+
+public function updateStatus(Order $order, Request $request)
+{
+    // اعتبارسنجی مقدار ورودی
+    $request->validate([
+        'status' => 'required|in:pending,preparing,sent,delivered,canceled',
+    ]);
+
+    // آپدیت وضعیت
+    $order->update(['status' => $request->status]);
+
+    // بازگشت به صفحه قبلی با پیام موفقیت
+    return back()->with('success', 'وضعیت سفارش با موفقیت تغییر کرد.');
+}
     }
     
 

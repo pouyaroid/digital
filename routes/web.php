@@ -194,4 +194,4 @@ Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.order
 // در فایل routes/web.php
 
 
-Route::patch('/admin/orders/{order}/status', [Order::class, 'updateStatus'])->name('admin.orders.updateStatus');
+Route::patch('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
