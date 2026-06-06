@@ -204,3 +204,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'update'])
         ->name('admin.menu-settings.update');
 });
+use App\Http\Controllers\Auth\PhoneAuthController;
+use App\Http\Controllers\ProfileController;
+
+Route::get('/login/phone', [PhoneAuthController::class, 'showPhoneForm'])->name('phone.form');
+
+Route::post('/login/phone', [PhoneAuthController::class, 'sendOtp'])->name('phone.send');
+
+Route::get('/login/otp', [PhoneAuthController::class, 'showOtpForm'])->name('otp.form');
+
+Route::post('/login/otp', [PhoneAuthController::class, 'verifyOtp'])->name('otp.verify');
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
