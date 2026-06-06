@@ -101,6 +101,6 @@ class PhoneAuthController extends Controller
 
         Auth::guard('customer')->login($customer);
 
-        return redirect()->route('profile.index');
+        return redirect()->route('home');
     }
 }
