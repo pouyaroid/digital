@@ -195,3 +195,12 @@ Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.order
 
 
 Route::patch('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+
+    Route::get('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'index'])
+        ->name('admin.menu-settings');
+
+    Route::post('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'update'])
+        ->name('admin.menu-settings.update');
+});

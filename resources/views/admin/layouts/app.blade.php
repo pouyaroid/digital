@@ -246,6 +246,7 @@
     <a href="{{ route('admin.contact.edit') }}" class="menu-item">📞 بخش تماس</a>
     <a href="{{ route('admin.customers.index') }}" class="menu-item">👥 مشتریان</a>
     <a href="{{ route('admin.settings.index') }}" class="menu-item">⚙️ تنظیمات استایل</a>
+    <a href="{{ route('admin.menu-settings') }}" class="menu-item">⚙️ تنظیمات منو</a>
     <a href="{{ route('admin.customers.smsForm') }}" class="menu-item">✉️ ارسال SMS</a>
     <a href="{{ route('home') }}" class="menu-item">👀 مشاهده منو</a>
     

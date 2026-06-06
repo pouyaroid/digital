@@ -28,102 +28,158 @@
     </style>
 </head>
 <body>
-    {{-- سبد خرید شناور --}}
-
     {{-- هدر کافه --}}
+
+    @php
+        // تنظیمات سفارش (MenuSettings)
+        use App\Models\MenuSetting;
+
+        $menuSettings = MenuSetting::first();
+        $orderingEnabled = $menuSettings?->ordering_enabled ?? 1;
+        $showPrices = $menuSettings?->show_prices ?? 1;
+        $showCalories = $menuSettings?->show_calories ?? 1;
+    @endphp
+
     <div class="header-banner">
         <div class="cafe-info">
+
             @if(!empty($header->logo))
                 <div class="cafe-logo">
                     <img src="{{ asset('storage/' . $header->logo) }}" alt="لوگو کافه">
                 </div>
             @endif
+
             <h1 class="cafe-name">{{ $header->cafe_name ?? 'کافه بدون نام' }}</h1>
             <p class="cafe-tagline">{{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}</p>
+
         </div>
+
         <div class="header-design">
             <div class="coffee-steam">{{ $header->coffee_emoji ?? '☕' }}</div>
         </div>
     </div>
-    <div id="floatingCart">
-        <span>🛒 سبد خرید: <strong id="cartCount">0</strong> آیتم</span>
-        <button id="checkoutBtn">ثبت نهایی</button>
-    </div>
 
-    {{-- ناوبری دسته‌ها --}}
+    {{-- 🛒 سبد خرید فقط اگر فعال باشد --}}
+    @if($orderingEnabled)
+        <div id="floatingCart">
+            <span>🛒 سبد خرید: <strong id="cartCount">0</strong> آیتم</span>
+            <button id="checkoutBtn">ثبت نهایی</button>
+        </div>
+    @endif
+
+    {{-- 📂 دسته‌بندی‌ها --}}
     <nav class="category-nav" id="categoryNav">
         <div class="nav-container">
             <button class="nav-btn active" data-category="all">🍽️ همه محصولات</button>
+
             @foreach($categories as $cat)
-                <button class="nav-btn" data-category="category-{{ $cat->id }}">{{ $cat->icon ?? '📌' }} {{ $cat->name }}</button>
+                <button class="nav-btn" data-category="category-{{ $cat->id }}">
+                    {{ $cat->icon ?? '📌' }} {{ $cat->name }}
+                </button>
             @endforeach
         </div>
     </nav>
 
-    {{-- لیست محصولات --}}
+    {{-- 🍽️ لیست محصولات --}}
     <main class="menu-container">
-        <div class="menu-content" id="menuContent" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+        <div class="menu-content"
+             style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+
             @foreach($items as $item)
-            <div class="menu-card" data-category="category-{{ $item->category_id }}" 
-                 style="width: 250px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); text-align:center; display:flex; flex-direction:column;">
-                
-                {{-- تصویر --}}
+
+            <div class="menu-card"
+                 data-category="category-{{ $item->category_id }}"
+                 style="width:250px; border-radius:15px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1); background:rgba(255,255,255,0.1); backdrop-filter:blur(8px); text-align:center; display:flex; flex-direction:column;">
+
+                {{-- 📸 تصویر --}}
                 @if($item->image)
-                    <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" 
-                         style="width:100%; height:180px; object-fit: cover; border-bottom:1px solid rgba(255,255,255,0.2);">
+                    <img src="{{ asset('storage/' . $item->image) }}"
+                         alt="{{ $item->name }}"
+                         style="width:100%; height:180px; object-fit:cover;">
                 @else
-                    <div style="width:100%; height:180px; background:#f5f5f5; display:flex; align-items:center; justify-content:center; border-bottom:1px solid rgba(255,255,255,0.2);">
+                    <div style="width:100%; height:180px; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
                         <span>🍽️ بدون تصویر</span>
                     </div>
                 @endif
 
-                <div style="padding: 15px; display:flex; flex-direction: column; gap:10px; align-items:center; justify-content:center;">
-                    <h3 style="font-size: 22px; margin:0; font-weight:bold;">{{ $item->name }}</h3>
+                <div style="padding:15px; display:flex; flex-direction:column; gap:10px; align-items:center;">
+
+                    <h3 style="font-size:22px; margin:0;">
+                        {{ $item->name }}
+                    </h3>
+
                     @if($item->tags)
-                        <p style="margin:0; font-size: 15px; color:#0d00ff;">🏷️ {{ str_replace(',', ' • ', $item->tags) }}</p>
+                        <p style="margin:0; font-size:15px; color:#0d00ff;">
+                            🏷️ {{ str_replace(',', ' • ', $item->tags) }}
+                        </p>
                     @endif
+
                     @if($item->description)
-                        <p style="margin:0; font-size: 16px; color:#000000;">{{ $item->description }}</p>
+                        <p style="margin:0; font-size:16px;">
+                            {{ $item->description }}
+                        </p>
                     @endif
-                    @if($item->calories)
-                        <p style="margin:0; font-size: 14px; color:#000000;">🔥 {{ $item->calories }} کالری</p>
+
+                    {{-- 🔥 کالری (از MenuSettings) --}}
+                    @if($showCalories && $item->calories)
+                        <p style="margin:0; font-size:14px;">
+                            🔥 {{ $item->calories }} کالری
+                        </p>
                     @endif
 
-                    <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-top:5px; flex-wrap: wrap;">
-                        @if($item->discount_price)
-                            <span style="text-decoration: line-through; color:#000000;">{{ number_format($item->price) }} تومان</span>
-                            <span style="color:#e74c3c; font-weight:bold; font-size:18px;">{{ number_format($item->discount_price) }} تومان</span>
-                        @else
-                            <span style="font-weight:bold; font-size:16px;">{{ number_format($item->price) }} تومان</span>
-                        @endif
-                        @if(!$item->is_available)
-                            <span style="background:#e74c3c; color:white; padding:2px 6px; border-radius:6px; font-size:12px;">❌ ناموجود</span>
-                        @endif
-                    </div>
+                    {{-- 💰 قیمت (از MenuSettings) --}}
+                    @if($showPrices)
+                        <div style="display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap;">
 
-                    {{-- تعداد و دکمه‌ها --}}
-                    
-<div class="qty-box">
-    <button class="increase-btn" data-id="{{ $item->id }}">+</button>
+                            @if($item->discount_price)
+                                <span style="text-decoration:line-through;">
+                                    {{ number_format($item->price) }} تومان
+                                </span>
 
-    <span class="quantity" id="qty-{{ $item->id }}">1</span>
+                                <span style="color:#e74c3c; font-weight:bold; font-size:18px;">
+                                    {{ number_format($item->discount_price) }} تومان
+                                </span>
+                            @else
+                                <span style="font-weight:bold;">
+                                    {{ number_format($item->price) }} تومان
+                                </span>
+                            @endif
 
-    <button class="decrease-btn" data-id="{{ $item->id }}">-</button>
-</div>
+                            @if(!$item->is_available)
+                                <span style="background:#e74c3c; color:#fff; padding:2px 6px; border-radius:6px; font-size:12px;">
+                                    ❌ ناموجود
+                                </span>
+                            @endif
 
+                        </div>
+                    @endif
 
+                    {{-- 🛒 سفارش فقط اگر فعال باشد --}}
+                    @if($orderingEnabled)
 
-    <button class="add-to-cart-btn"
-        data-id="{{ $item->id }}"
-        data-name="{{ $item->name }}"
-        data-price="{{ $item->discount_price ?? $item->price }}">
-    افزودن به سبد خرید
-    </button>
+                        <div class="qty-box">
+                            <button class="increase-btn" data-id="{{ $item->id }}">+</button>
+                            <span class="quantity" id="qty-{{ $item->id }}">1</span>
+                            <button class="decrease-btn" data-id="{{ $item->id }}">-</button>
+                        </div>
+
+                        <button class="add-to-cart-btn"
+                            data-id="{{ $item->id }}"
+                            data-name="{{ $item->name }}"
+                            data-price="{{ $item->discount_price ?? $item->price }}">
+                            افزودن به سبد خرید
+                        </button>
+
+                    @endif
+
+                </div>
+            </div>
+
             @endforeach
         </div>
     </main>
 
-    {{-- Footer --}}
+    {{-- 📞 Footer --}}
     <footer class="cafe-footer">
         <div class="footer-content">
             <div class="contact-info">
@@ -134,6 +190,7 @@
             </div>
         </div>
     </footer>
+</body>
 
     {{-- JS --}}
     <script>
