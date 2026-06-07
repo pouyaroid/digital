@@ -3,40 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
-public function byPhone(Request $request)
-{
-    $phone = $request->phone;
+    // ثبت آدرس
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'nullable|string',
+            'address' => 'required|string',
+        ]);
 
-    $customer = Customer::where('phone', $phone)->first();
+        $customer = auth('customer')->user();
 
-    return response()->json(
-        $customer ? $customer->addresses : []
-    );
-}
+        if (!$customer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'phone' => 'required',
-        'address' => 'required|string'
-    ]);
+        $address = $customer->addresses()->create([
+            'title' => $request->title,
+            'address' => $request->address,
+        ]);
 
-    $customer = Customer::firstOrCreate(
-        ['phone' => $request->phone],
-        ['name' => 'مشتری']
-    );
+        return response()->json([
+            'success' => true,
+            'data' => $address
+        ]);
+    }
 
-    $address = Address::create([
-        'customer_id' => $customer->id,
-        'title' => $request->title ?? null,
-        'address' => $request->address,
-    ]);
+    // گرفتن لیست آدرس‌ها (اصلاح شده)
+    public function index()
+    {
+        $customer = auth('customer')->user();
 
-    return response()->json($address);
-}
-}
+        if (!$customer) {
+            return response()->json([], 401);
+        }
+
+        return response()->json($customer->addresses);
+    }
+    
+
+   
+
+    }

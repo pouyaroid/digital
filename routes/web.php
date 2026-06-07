@@ -178,7 +178,7 @@ Route::post('/address/store', [AddressController::class, 'store'])->name('addres
 
 // گرفتن آدرس‌ها بر اساس شماره موبایل
 
-Route::get('/addresses/by-phone', [AddressController::class, 'byPhone']);
+
 // صفحه checkout
 Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 
@@ -186,7 +186,7 @@ Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/order/submit', [OrderController::class, 'store'])->name('order.submit');
 
 // گرفتن آدرس‌ها بر اساس شماره موبایل (AJAX)
-Route::get('/addresses/by-phone', [AddressController::class, 'byPhone'])->name('address.byPhone');
+
 
 // ثبت آدرس جدید (AJAX)
 Route::post('/addresses/store', [AddressController::class, 'store'])->name('address.store');
@@ -215,3 +215,7 @@ Route::get('/login/otp', [PhoneAuthController::class, 'showOtpForm'])->name('otp
 
 Route::post('/login/otp', [PhoneAuthController::class, 'verifyOtp'])->name('otp.verify');
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
+Route::get('/customer/addresses', [AddressController::class, 'index'])->name('address.index');
+Route::post('/customer/addresses', [AddressController::class, 'store'])->name('address.store');

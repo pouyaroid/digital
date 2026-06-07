@@ -23,6 +23,11 @@
         }
         .increase-btn, .decrease-btn { background: #3498db; color: white; }
         .add-to-cart-btn { background: #27ae60; color:white; margin-top:5px; }
+        /* استایل دکمه چک‌اوت/ورود */
+        #checkoutBtn {
+            background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 5px;
+        }
+        #checkoutBtn:hover { background: #c0392b; }
     </style>
 </head>
 <body>
@@ -36,6 +41,11 @@
         $orderingEnabled = $menuSettings?->ordering_enabled ?? 1;
         $showPrices = $menuSettings?->show_prices ?? 1;
         $showCalories = $menuSettings?->show_calories ?? 1;
+
+        // --- بررسی وضعیت لاگین مشتری ---
+        // توجه: مطمئن شوید که در config/auth.php گارد customer را تعریف کرده‌اید
+        // اگر از گارد پیش‌فرض web برای جدول users استفاده می‌کنید، به جای guard('customer') از check() استفاده کنید.
+        $isCustomerLoggedIn = auth()->guard('customer')->check();
     @endphp
 
     <div class="header-banner">
@@ -61,7 +71,15 @@
     @if($orderingEnabled)
         <div id="floatingCart">
             <span>🛒 سبد خرید: <strong id="cartCount">0</strong> آیتم</span>
-            <button id="checkoutBtn">ثبت نهایی</button>
+            
+            {{-- دکمه شرطی: ورود یا ثبت نهایی --}}
+            <button id="checkoutBtn" data-is-logged-in="{{ $isCustomerLoggedIn ? 'true' : 'false' }}">
+                @if($isCustomerLoggedIn)
+                    ثبت نهایی سفارش
+                @else
+                    ورود
+                @endif
+            </button>
         </div>
     @endif
 
@@ -238,10 +256,24 @@
                 countEl.innerText = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
             }
 
-            // ثبت نهایی
+            // منطق دکمه ورود / ثبت نهایی
             document.getElementById('checkoutBtn').addEventListener('click', () => {
+                // 1. همیشه سبد خرید را در LocalStorage ذخیره کن
+                // این باعث می‌شود اگر کاربر لاگین نبود، انتخاب‌هایش در حافظه بماند
                 localStorage.setItem('cart', JSON.stringify(cart));
-                window.location.href = '/checkout';
+
+                // 2. بررسی وضعیت لاگین کاربر (از ویژگی data-is-logged-in که در HTML ست کردیم)
+                const btn = document.getElementById('checkoutBtn');
+                const isLoggedIn = btn.dataset.isLoggedIn === 'true';
+
+                if (isLoggedIn) {
+                    // اگر لاگین بود -> به صفحه تسویه حساب برو
+                    window.location.href = '/checkout';
+                } else {
+                    // اگر لاگین نبود -> به صفحه ورود (OTP) برو
+                    // مطمئن شوید روت '/login' برای احراز هویت مشتریان تعریف شده است
+                    window.location.href = '/login/phone';
+                }
             });
 
             // فیلتر دسته‌ها
