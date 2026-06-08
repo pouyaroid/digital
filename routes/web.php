@@ -40,8 +40,13 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
 
 // فایل CSS داینامیک
+// Route::get('/dynamic-style.css', function () {
+//     return response()->view('dynamic-style')
+//         ->header('Content-Type', 'text/css');
+// });
 Route::get('/dynamic-style.css', function () {
-    return response()->view('dynamic-style')
+    return response()
+        ->view('dynamic-style')
         ->header('Content-Type', 'text/css');
 });
 

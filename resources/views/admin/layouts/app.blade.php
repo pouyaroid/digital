@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: "Vazir", sans-serif;
-            color: #fff;
+            color: #c1c1c1;
             direction: rtl;
             text-align: right;
             background: linear-gradient(135deg, #292e55 0%, #006aff 100%);
