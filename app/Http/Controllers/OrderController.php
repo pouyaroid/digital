@@ -30,65 +30,76 @@ class OrderController extends Controller
 
     // ثبت سفارش (نسخه امن)
     public function store(Request $request)
-    {
-        $request->validate([
-            'address_id' => 'required|exists:addresses,id',
-            'cart'       => 'required|array|min:1',
-        ]);
+{
+    $request->validate([
+        'address_id'     => 'required|exists:addresses,id',
+        'cart'           => 'required|array|min:1',
+        'payment_method' => 'required|in:online,cash',
+    ]);
 
-        $customer = auth('customer')->user();
+    $customer = auth('customer')->user();
 
-        if (!$customer) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized'
-            ], 401);
+    if (!$customer) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    DB::beginTransaction();
+
+    try {
+
+        // 1. محاسبه قیمت واقعی
+        $totalPrice = 0;
+
+        foreach ($request->cart as $item) {
+            $totalPrice += $item['price'] * $item['qty'];
         }
 
-        DB::beginTransaction();
+        // 2. ساخت سفارش
+        $order = Order::create([
+            'customer_id'    => $customer->id,
+            'address_id'     => $request->address_id,
+            'total_price'    => $totalPrice,
+            'status'         => 'pending',
+            'payment_method' => $request->payment_method, // 👈 مهم
+        ]);
 
-        try {
-
-            // 1️⃣ محاسبه مبلغ کل
-            $totalPrice = 0;
-
-            foreach ($request->cart as $item) {
-                $totalPrice += $item['price'] * $item['qty'];
-            }
-
-            // 2️⃣ ساخت سفارش
-            $order = Order::create([
-                'customer_id' => $customer->id,
-                'address_id'  => $request->address_id,
-                'total_price' => $totalPrice,
-                'status'      => 'pending',
+        // 3. آیتم‌ها
+        foreach ($request->cart as $item) {
+            OrderItem::create([
+                'order_id'     => $order->id,
+                'cafe_item_id' => $item['id'],
+                'price'        => $item['price'],
+                'quantity'     => $item['qty'],
             ]);
+        }
 
-            // 3️⃣ آیتم‌ها
-            foreach ($request->cart as $item) {
-                OrderItem::create([
-                    'order_id'     => $order->id,
-                    'cafe_item_id' => $item['id'],
-                    'price'        => $item['price'],
-                    'quantity'     => $item['qty'],
-                ]);
-            }
+        DB::commit();
 
-            DB::commit();
-
+        // 4. تصمیم پرداخت
+        if ($request->payment_method === 'online') {
             return response()->json([
                 'success'  => true,
                 'order_id' => $order->id,
+                'redirect' => route('payment.pay', $order->id),
             ]);
-
-        } catch (\Throwable $e) {
-
-            DB::rollBack();
-
-            return response()->json([
-                'success' => false,
-                'message' => 'خطا در ثبت سفارش'
-            ], 500);
         }
+
+        return response()->json([
+            'success'  => true,
+            'order_id' => $order->id,
+        ]);
+
+    } catch (\Throwable $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'خطا در ثبت سفارش'
+        ], 500);
     }
+}
 }

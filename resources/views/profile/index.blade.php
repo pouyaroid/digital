@@ -3,6 +3,24 @@
 @section('title', 'پنل کاربری')
 
 @section('content')
+@if(session('payment_status') == 'success')
+    <div class="alert alert-success">
+        <h5>✅ پرداخت با موفقیت انجام شد</h5>
+
+        <p>
+            کد پیگیری:
+            <strong>{{ session('ref_id') }}</strong>
+        </p>
+    </div>
+@endif
+
+@if(session('payment_status') == 'failed')
+    <div class="alert alert-danger">
+        <h5>❌ پرداخت ناموفق بود</h5>
+
+        <p>{{ session('message') }}</p>
+    </div>
+@endif
 
 <div class="container py-5">
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\CafeItemController;
 use App\Http\Controllers\ContactSectionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\PaymentController;
 use App\Models\Address;
 
 use App\Models\Customer;
@@ -210,6 +211,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         ->name('admin.menu-settings.update');
 });
 use App\Http\Controllers\Auth\PhoneAuthController;
+
 use App\Http\Controllers\ProfileController;
 
 Route::get('/login/phone', [PhoneAuthController::class, 'showPhoneForm'])->name('phone.form');
@@ -224,3 +226,11 @@ Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index
 Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
 Route::get('/customer/addresses', [AddressController::class, 'index'])->name('address.index');
 Route::post('/customer/addresses', [AddressController::class, 'store'])->name('address.store');
+// Route::get('/payment',[paymentController::class,'payment'])->name('payment');
+// Route::get('/payment/verify',[paymentController::class,'verify'])->name('payment.verify');
+Route::get('/payment/{order}', [PaymentController::class, 'pay'])
+    ->name('payment.pay');
+
+    Route::get('/payment/verify', [PaymentController::class, 'verify'])
+    ->name('payment.verify');
+

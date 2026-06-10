@@ -224,6 +224,268 @@
                 font-size: 0.9rem;
             }
         }
+        theme-builder {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .theme-header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .theme-header h2 { margin: 0; color: #333; font-size: 1.5rem; }
+    .theme-header p { margin: 5px 0 0; color: #666; font-size: 0.9rem; }
+
+    .builder-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px; /* دسکتاپ: تنظیمات (اتوماتیک) | پیش‌نمایش (۴۰۰ پیکسل) */
+        gap: 30px;
+        align-items: start;
+    }
+
+    /* --- پنل تنظیمات --- */
+    .settings-panel {
+        background: #fff;
+        padding: 25px;
+        border-radius: var(--radius);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .settings-group {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    .settings-group:last-child { border-bottom: none; }
+
+    .settings-group h3 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        color: #111;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .field {
+        margin-bottom: 20px;
+    }
+    .field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 600;
+    }
+
+    .color-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f9fafb;
+        padding: 5px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+    }
+
+    input[type="color"] {
+        -webkit-appearance: none;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        cursor: pointer;
+        background: none;
+        flex-shrink: 0; /* جلوگیری از کوچک شدن رنگ‌پیکر */
+    }
+    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+    input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+
+    input[type="text"] {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-family: monospace;
+        direction: ltr;
+        text-align: left;
+        font-size: 0.9rem;
+        color: #333;
+        min-width: 0; /* جلوگیری از overflow در فلکس */
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        direction: ltr;
+    }
+
+    .save-btn {
+        width: 100%;
+        padding: 15px;
+        background: #222;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    .save-btn:hover { background: #000; }
+    .save-btn:disabled { opacity: 0.7; cursor: wait; }
+
+    /* --- پنل پیش‌نمایش --- */
+    .preview-panel {
+        position: sticky;
+        top: 20px;
+    }
+
+    .preview-label {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+        color: #888;
+        background: rgba(255,255,255,0.5);
+        padding: 5px;
+        border-radius: 20px;
+    }
+
+    .preview-card {
+        border-radius: var(--radius);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        min-height: 500px; /* ارتفاع دسکتاپ */
+        display: flex;
+        flex-direction: column;
+        transition: background 0.3s ease;
+        position: relative;
+    }
+
+    .preview-header {
+        padding: 25px;
+        text-align: center;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+
+    .preview-body {
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .pv-heading { margin-bottom: 10px; transition: color 0.3s; font-size: 1.4rem; }
+    .pv-text { margin-bottom: 25px; line-height: 1.6; transition: color 0.3s; max-width: 90%; font-size: 0.95rem; }
+    .pv-muted { font-size: 0.85rem; margin-top: 15px; transition: color 0.3s; }
+
+    .pv-btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: inherit;
+    }
+
+    /* Toast Message */
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #10B981;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        transform: translateY(150%);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1000;
+        font-weight: bold;
+        right: 50%;
+        transform: translateX(50%) translateY(150%); /* وسط چین کردن در موبایل */
+    }
+    @media(min-width: 768px) {
+        .toast {
+            right: 20px;
+            transform: translateY(150%); /* حالت عادی دسکتاپ */
+        }
+    }
+    .toast.show { 
+        bottom: 30px;
+        transform: translateX(50%) translateY(0);
+    }
+    @media(min-width: 768px) {
+        .toast.show {
+            transform: translateY(0);
+        }
+    }
+
+    /* --- ریسپانسیو (اصلاحات اصلی) --- */
+    
+    /* 1. تبلت و لپ‌تاپ کوچک */
+    @media (max-width: 1024px) {
+        .builder-grid {
+            grid-template-columns: 1fr 320px; /* کاهش عرض پیش‌نمایش */
+            gap: 20px;
+        }
+        .theme-builder {
+            padding: 15px;
+        }
+    }
+
+    /* 2. موبایل */
+    @media (max-width: 768px) {
+        .builder-grid {
+            grid-template-columns: 1fr; /* تک ستون */
+            gap: 20px;
+        }
+
+        /* پیش‌نمایش بالا قرار می‌گیرد */
+        .preview-panel {
+            position: static;
+            order: -1; /* بالا آوردن */
+            margin-bottom: 10px;
+        }
+
+        .preview-card {
+            min-height: 350px; /* کاهش ارتفاع پیش‌نمایش در موبایل */
+            border-radius: 12px;
+        }
+
+        .preview-header { padding: 15px; font-size: 1rem; }
+        .preview-body { padding: 20px; }
+        .pv-heading { font-size: 1.2rem; }
+        .pv-btn { padding: 10px 20px; font-size: 0.9rem; }
+
+        /* تنظیمات */
+        .settings-panel {
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .theme-header h2 { font-size: 1.3rem; }
+    }
     </style>
 </head>
 <body>
