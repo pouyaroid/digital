@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
     public function index()
     {
-        $customer = auth('customer')->user();
+        $customer = Customer::with([
+            'orders' => function ($q) {
+                $q->orderByDesc('id');
+            },
+            'orders.payment'
+        ])->find(auth('customer')->id());
     
         return view('profile.index', compact('customer'));
     }

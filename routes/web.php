@@ -228,9 +228,8 @@ Route::get('/customer/addresses', [AddressController::class, 'index'])->name('ad
 Route::post('/customer/addresses', [AddressController::class, 'store'])->name('address.store');
 // Route::get('/payment',[paymentController::class,'payment'])->name('payment');
 // Route::get('/payment/verify',[paymentController::class,'verify'])->name('payment.verify');
-Route::get('/payment/{order}', [PaymentController::class, 'pay'])
-    ->name('payment.pay');
-
-    Route::get('/payment/verify', [PaymentController::class, 'verify'])
+Route::get('/payment/verify', [PaymentController::class, 'verify'])
     ->name('payment.verify');
 
+Route::get('/payment/{order}', [PaymentController::class, 'pay'])
+    ->name('payment.pay');

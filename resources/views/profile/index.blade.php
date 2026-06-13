@@ -3,24 +3,6 @@
 @section('title', 'پنل کاربری')
 
 @section('content')
-@if(session('payment_status') == 'success')
-    <div class="alert alert-success">
-        <h5>✅ پرداخت با موفقیت انجام شد</h5>
-
-        <p>
-            کد پیگیری:
-            <strong>{{ session('ref_id') }}</strong>
-        </p>
-    </div>
-@endif
-
-@if(session('payment_status') == 'failed')
-    <div class="alert alert-danger">
-        <h5>❌ پرداخت ناموفق بود</h5>
-
-        <p>{{ session('message') }}</p>
-    </div>
-@endif
 
 <div class="container py-5">
 
@@ -97,33 +79,55 @@
                                     <th>شماره</th>
                                     <th>مبلغ</th>
                                     <th>وضعیت</th>
+                                    <th>وضعیت پرداخت</th>
                                     <th>تاریخ</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 @forelse($customer->orders ?? [] as $order)
-                                    <tr>
-                                        <td>#{{ $order->id }}</td>
-                                        <td>{{ number_format($order->total_price) }} تومان</td>
-                                        <td>
-                                            @if($order->status == 'pending')
-                                                <span class="badge bg-warning">در انتظار</span>
-                                            @elseif($order->status == 'preparing')
-                                                <span class="badge bg-info">در حال آماده‌سازی</span>
-                                            @else
-                                                <span class="badge bg-success">تحویل شده</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $order->created_at }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center text-muted">
-                                            سفارشی ثبت نشده
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                <tr>
+                                    <td>#{{ $order->id }}</td>
+                            
+                                    <td>{{ number_format($order->total_price) }} تومان</td>
+                            
+                                    {{-- وضعیت سفارش --}}
+                                    <td>
+                                        @if($order->status == 'pending')
+                                            <span class="badge bg-warning">در انتظار</span>
+                                        @elseif($order->status == 'preparing')
+                                            <span class="badge bg-info">در حال آماده‌سازی</span>
+                                        @else
+                                            <span class="badge bg-success">تحویل شده</span>
+                                        @endif
+                                    </td>
+                            
+                                    {{-- وضعیت پرداخت --}}
+                                    <td>
+                                        @if($order->payment_method == 'cod')
+                                            <span class="badge bg-primary">پرداخت در محل</span>
+                            
+                                        @elseif(optional($order->payment)->status == 'success')
+                                            <span class="badge bg-success">پرداخت شده</span>
+                            
+                                        @elseif(optional($order->payment)->status == 'pending')
+                                            <span class="badge bg-warning">در انتظار پرداخت</span>
+                            
+                                        @else
+                                            <span class="badge bg-danger">ناموفق</span>
+                                        @endif
+                                    </td>
+                            
+                                    {{-- تاریخ --}}
+                                    <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        سفارشی ثبت نشده
+                                    </td>
+                                </tr>
+                            @endforelse
                             </tbody>
 
                         </table>

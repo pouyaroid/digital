@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="5;url={{ route('profile') }}">
+<meta http-equiv="refresh" content="5;url={{ route('profile.index') }}">
 <title>نتیجه پرداخت</title>
 
 <style>
