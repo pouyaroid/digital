@@ -13,7 +13,7 @@ class ProfileController extends Controller
             'orders' => function ($q) {
                 $q->orderByDesc('id');
             },
-            'orders.payment'
+            'orders.payments'
         ])->find(auth('customer')->id());
     
         return view('profile.index', compact('customer'));

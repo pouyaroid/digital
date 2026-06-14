@@ -104,13 +104,13 @@
                             
                                     {{-- وضعیت پرداخت --}}
                                     <td>
-                                        @if($order->payment_method == 'cod')
+                                        @if($order->payment_method == 'cash')
                                             <span class="badge bg-primary">پرداخت در محل</span>
                             
-                                        @elseif(optional($order->payment)->status == 'success')
+                                        @elseif(optional($order->payments)->status == 'success')
                                             <span class="badge bg-success">پرداخت شده</span>
                             
-                                        @elseif(optional($order->payment)->status == 'pending')
+                                        @elseif(optional($order->payments)->status == 'pending')
                                             <span class="badge bg-warning">در انتظار پرداخت</span>
                             
                                         @else
