@@ -11,5 +11,9 @@ class MenuSetting extends Model
         'show_prices',
         'show_calories',
         'theme_color',
+
+        // 💳 payment settings
+        'online_payment_enabled',
+        'cash_payment_enabled',
     ];
 }

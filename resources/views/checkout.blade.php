@@ -273,14 +273,31 @@ input[type="text"]:focus, textarea:focus { border-color: var(--primary); }
     <h2 class="section-title">💳 روش پرداخت</h2>
 
     <div class="payment-method-wrapper">
-        <label class="payment-option">
-            <input type="radio" name="payment_method" value="online" checked>
-            پرداخت آنلاین
-        </label>
-        <label class="payment-option">
-            <input type="radio" name="payment_method" value="cash">
-            پرداخت در محل
-        </label>
+
+        @if(!$settings->cash_payment_enabled && !$settings->online_payment_enabled)
+            <div class="alert alert-danger">
+                از پذیرش سفارش معذوریم
+            </div>
+        @else
+    
+            @if($settings->online_payment_enabled)
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="online"
+                        {{ $settings->cash_payment_enabled ? '' : 'checked' }}>
+                    پرداخت آنلاین
+                </label>
+            @endif
+    
+            @if($settings->cash_payment_enabled)
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="cash"
+                        {{ !$settings->online_payment_enabled ? 'checked' : '' }}>
+                    پرداخت در محل
+                </label>
+            @endif
+    
+        @endif
+    
     </div>
 
     {{-- فرم ثبت نهایی --}}
