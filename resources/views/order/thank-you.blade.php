@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سفارش شما در حال پردازش است</title>
 <style>
-body { font-family: Vazirmatn, sans-serif; padding: 50px; text-align:center; }
+body { font-family: Vazir, sans-serif; padding: 50px; text-align:center; }
 h1 { color:#27ae60; }
 </style>
 </head>

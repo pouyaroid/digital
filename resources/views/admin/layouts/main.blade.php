@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>@yield('title', 'پروژه')</title>
+    <title>@yield('title', ' ')</title>
 
-    {{-- Bootstrap RTL --}}
+  
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
     <style>
         @font-face {
             font-family: 'Vazir';

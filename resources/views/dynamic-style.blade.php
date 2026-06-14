@@ -29,7 +29,7 @@
     --r-lg:  22px;
     --r-xl:  30px;
     --r-2xl: 40px;
-    --font:  'Vazirmatn', sans-serif;
+    --font:  'Vazir', sans-serif;
     --ease:  cubic-bezier(0.4, 0, 0.2, 1);
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --nav-active-color: {{ setting('nav_active_color', '#000000') }};
