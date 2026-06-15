@@ -34,6 +34,9 @@ public function updateStatus(Order $order, Request $request)
     // بازگشت به صفحه قبلی با پیام موفقیت
     return back()->with('success', 'وضعیت سفارش با موفقیت تغییر کرد.');
 }
+
+
+
     }
-    
+       
 

@@ -68,7 +68,6 @@
     <button class="btn btn-success mt-3">ذخیره</button>
 </form>
 
-{{-- استایل شیشه‌ای --}}
 
 
 @endsection

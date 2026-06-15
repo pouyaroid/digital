@@ -1,8 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<!-- لود فونت وزیرمتن برای زیبایی متون فارسی -->
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+
 
 <style>
     :root {
@@ -18,7 +17,7 @@
     }
 
     .orders-wrapper {
-        font-family: 'Vazirmatn', sans-serif;
+        font-family: 'Vazir', sans-serif;
         padding: 24px;
         background-color: var(--bg-color);
         min-height: 100vh;
@@ -262,7 +261,9 @@
                         <th>جمع کل</th>
                         <!-- اضافه کردن ستون وضعیت -->
                         <th>وضعیت</th>
+                        <th>روش پرداخت</th>
                         <th>تاریخ</th>
+                        <th>چاپ</th>
                     </tr>
                 </thead>
 
@@ -349,11 +350,42 @@
                             </form>
                         </td>
                         <!-- --- پایان بخش جدید --- -->
-
+                        <td data-label="روش پرداخت">
+                            @php
+                                $paymentMethod = match($order->payment_method) {
+                                    'online' => '💳 پرداخت آنلاین',
+                                    'cash' => '💵 پرداخت در محل',
+                                    default => '-',
+                                };
+                            @endphp
+                        
+                            {{ $paymentMethod }}
+                        </td>
                         <td data-label="تاریخ">
-                            <small>{{ $order->created_at->format('Y-m-d H:i') }}</small>
+                            <small>
+                                {{ \Hekmatinasser\Verta\Verta::instance($order->created_at)->format('Y/m/d H:i') }}
+                            </small>
+                        </td>
+                        <td data-label="چاپ">
+                            <a href="{{ route('admin.orders.print', $order->id) }}"
+                               target="_blank"
+                               style="
+                                    display:inline-flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    padding:6px 10px;
+                                    background:#111827;
+                                    color:#fff;
+                                    text-decoration:none;
+                                    border-radius:8px;
+                                    font-size:13px;
+                                    font-weight:600;
+                               ">
+                                🖨 چاپ
+                            </a>
                         </td>
                     </tr>
+                    
                     @endforeach
                 </tbody>
             </table>

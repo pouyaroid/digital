@@ -119,7 +119,9 @@
                                     </td>
                             
                                     {{-- تاریخ --}}
-                                    <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>
+                                        {{ \Hekmatinasser\Verta\Verta::instance($order->created_at)->format('Y/m/d H:i') }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>

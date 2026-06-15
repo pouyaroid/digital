@@ -12,8 +12,10 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PaymentController;
 use App\Models\Address;
-
 use App\Models\Customer;
+use App\Http\Controllers\Auth\PhoneAuthController;
+
+use App\Http\Controllers\ProfileController;
 
 // Fortify
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -210,9 +212,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'update'])
         ->name('admin.menu-settings.update');
 });
-use App\Http\Controllers\Auth\PhoneAuthController;
 
-use App\Http\Controllers\ProfileController;
 
 Route::get('/login/phone', [PhoneAuthController::class, 'showPhoneForm'])->name('phone.form');
 
@@ -233,3 +233,6 @@ Route::get('/payment/verify', [PaymentController::class, 'verify'])
 
 Route::get('/payment/{order}', [PaymentController::class, 'pay'])
     ->name('payment.pay');
+
+    Route::get('/admin/orders/{order}/print', [OrderController::class, 'print'])
+    ->name('admin.orders.print');

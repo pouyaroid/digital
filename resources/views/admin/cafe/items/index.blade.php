@@ -71,10 +71,7 @@
 
     <button class="btn btn-success mt-3">ثبت آیتم</button>
 </form>
-
 <hr>
-
-{{-- جدول آیتم‌ها --}}
 {{-- جدول آیتم‌ها --}}
 <div class="glass-card p-3">
     <table class="table table-bordered mb-0 align-middle">

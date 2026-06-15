@@ -7,7 +7,6 @@
         <div class="card-header bg-dark text-white">
             تنظیمات منوی دیجیتال
         </div>
-
         <div class="card-body">
 
             @if(session('success'))
@@ -69,11 +68,8 @@
                 <button class="btn btn-primary">
                     ذخیره تنظیمات
                 </button>
-
             </form>
-
         </div>
     </div>
-
 </div>
 @endsection

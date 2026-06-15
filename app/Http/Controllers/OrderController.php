@@ -123,4 +123,14 @@ class OrderController extends Controller
             ], 500);
         }
     }
+    public function print(Order $order)
+{
+    $order->load([
+        'customer',
+        'address',
+        'items.cafeItem'
+    ]);
+
+    return view('admin.orders.print', compact('order'));
+}
 }
