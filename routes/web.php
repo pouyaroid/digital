@@ -236,3 +236,5 @@ Route::get('/payment/{order}', [PaymentController::class, 'pay'])
 
     Route::get('/admin/orders/{order}/print', [OrderController::class, 'print'])
     ->name('admin.orders.print');
+    Route::get('/admin/orders/poll', [OrderController::class, 'poll'])
+    ->name('admin.orders.poll');
