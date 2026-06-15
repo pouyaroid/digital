@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\PhoneAuthController;
 
 use App\Http\Controllers\ProfileController;
 
+
 // Fortify
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
@@ -42,11 +43,7 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware('guest')
     ->name('login');
 
-// فایل CSS داینامیک
-// Route::get('/dynamic-style.css', function () {
-//     return response()->view('dynamic-style')
-//         ->header('Content-Type', 'text/css');
-// });
+
 Route::get('/dynamic-style.css', function () {
     return response()
         ->view('dynamic-style')
@@ -234,7 +231,7 @@ Route::get('/payment/verify', [PaymentController::class, 'verify'])
 Route::get('/payment/{order}', [PaymentController::class, 'pay'])
     ->name('payment.pay');
 
-    Route::get('/admin/orders/{order}/print', [OrderController::class, 'print'])
+    Route::get('/admin/orders/{order}/print', [AdminOrderController::class, 'print'])
     ->name('admin.orders.print');
-    Route::get('/admin/orders/poll', [OrderController::class, 'poll'])
+    Route::get('/admin/orders/poll', [AdminOrderController::class, 'poll'])
     ->name('admin.orders.poll');

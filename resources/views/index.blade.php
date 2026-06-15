@@ -27,7 +27,7 @@
     {{-- ───── HERO ───── --}}
     <header class="hero">
         <div class="hero-glass">
-
+    
             <div class="hero-logo-ring">
                 @if(!empty($header->logo))
                     <img src="{{ asset('storage/' . $header->logo) }}" alt="لوگو">
@@ -35,17 +35,48 @@
                     <div class="hero-logo-placeholder">{{ $header->coffee_emoji ?? '☕' }}</div>
                 @endif
             </div>
-
+    
             <div class="hero-info">
                 <h1 class="hero-name">{{ $header->cafe_name ?? 'کافه بدون نام' }}</h1>
                 <p class="hero-tagline">{{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}</p>
+    
                 <div class="hero-pills">
                     <span class="hero-pill pill-open">الان باز است</span>
                     <span class="hero-pill pill-info">📍 {{ $contact->address ?? 'آدرس ثبت نشده' }}</span>
                 </div>
-            </div>
+    
+                {{-- SOCIAL + CONTACT --}}
+                <div class="hero-actions">
 
-        </div>
+                    {{-- Instagram --}}
+                    @if(!empty($contact->instagram_url))
+                        <a href="{{ $contact->instagram_url }}"
+                           target="_blank"
+                           class="hero-icon-btn"
+                           aria-label="Instagram">
+                
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor"
+                                    d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5a5 5 0 110 10 5 5 0 010-10zm6-1.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/>
+                            </svg>
+                
+                        </a>
+                    @endif
+                
+                    {{-- Phone -> scroll to footer --}}
+                    <a href="#contact-footer"
+                       class="hero-icon-btn"
+                       aria-label="Contact">
+                
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor"
+                                d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+                        </svg>
+                
+                    </a>
+                
+                </div>
+                
     </header>
 
     {{-- ───── CATEGORY NAV ───── --}}
@@ -168,21 +199,29 @@
                     @endif
 
                     @if($orderingEnabled && $avail)
-                        <div class="order-controls">
-                            <div class="qty-wrap">
-                                <button class="qty-btn decrease-btn" data-id="{{ $item->id }}">−</button>
-                                <span class="qty-num" id="qty-{{ $item->id }}">1</span>
-                                <button class="qty-btn increase-btn" data-id="{{ $item->id }}">+</button>
-                            </div>
-                            <button
-                                class="add-btn"
-                                data-id="{{ $item->id }}"
-                                data-name="{{ $item->name }}"
-                                data-price="{{ $finalPrice }}"
-                            >افزودن</button>
+                    <div class="order-controls">
+                        <div class="qty-wrap">
+                
+                            {{-- + سمت چپ --}}
+                            <button class="qty-btn increase-btn" data-id="{{ $item->id }}">+</button>
+                
+                            <span class="qty-num" id="qty-{{ $item->id }}">1</span>
+                
+                            {{-- − سمت راست --}}
+                            <button class="qty-btn decrease-btn" data-id="{{ $item->id }}">−</button>
+                
                         </div>
-                    @endif
-
+                
+                        <button
+                            class="add-btn"
+                            data-id="{{ $item->id }}"
+                            data-name="{{ $item->name }}"
+                            data-price="{{ $finalPrice }}"
+                        >
+                            افزودن
+                        </button>
+                    </div>
+                @endif
                 </div>
             </div>
 
@@ -197,24 +236,29 @@
     </main>
 
     {{-- ───── FOOTER ───── --}}
-    <footer>
+    <footer id="contact-footer">
         <div class="footer-inner">
             <div class="footer-brand">{{ $header->cafe_name ?? 'کافه' }} <span>•</span></div>
+    
             <div class="footer-rows">
                 <div class="footer-row">
                     <span class="footer-row-icon">📍</span>
                     <span>{{ $contact->address ?? 'آدرس تعریف نشده' }}</span>
                 </div>
+    
                 <div class="footer-row">
                     <span class="footer-row-icon">📞</span>
                     <span>{{ $contact->phone ?? 'شماره تعریف نشده' }}</span>
                 </div>
+    
                 <div class="footer-row">
                     <span class="footer-row-icon">🕐</span>
                     <span>{{ $contact->working_hours ?? 'ساعات کاری تعریف نشده' }}</span>
                 </div>
             </div>
+    
             <hr class="footer-sep">
+    
             <p class="footer-copy">طراحی شده با ❤️</p>
         </div>
     </footer>

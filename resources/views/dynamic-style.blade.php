@@ -93,7 +93,7 @@ body::after {
     flex-shrink: 0;
     width: 88px; height: 88px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FF7043, #FF5722, #E64A19);
+    background: var(--brand);;
     padding: 3px;
     box-shadow: var(--shadow-brand);
 }
@@ -705,4 +705,53 @@ footer {
     .menu-grid { grid-template-columns: 1fr; }
     .menu-wrap { padding: 16px 14px 120px; }
     .cat-nav { padding: 10px 14px; }
+}
+
+.hero-actions{
+    margin-top: 1.25rem;
+
+    display:flex;
+    justify-content:flex-end; /* 👈 مهم‌ترین تغییر */
+    align-items:center;
+    gap:.75rem;
+
+    width:100%; /* 👈 باعث میشه کل عرض رو بگیره */
+}
+.hero-icon-btn{
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.18);
+
+    color:var(--brand);
+    text-decoration:none;
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.12),
+        inset 0 1px 1px rgba(255,255,255,.15);
+
+    transition:.25s ease;
+}
+
+.hero-icon-btn:hover{
+    transform:translateY(-3px);
+
+    background:var(--brand);
+    border-color:var(--brand);
+
+    box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+
+.hero-icon-btn i{
+    font-size:1rem;
 }
