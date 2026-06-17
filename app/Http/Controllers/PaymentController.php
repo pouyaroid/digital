@@ -18,6 +18,12 @@ class PaymentController extends Controller
     
     $order = Order::findOrFail($orderId);
 
+    abort_if(
+        $order->customer_id !== auth('customer')->id(),
+        403,
+        'شما به این سفارش دسترسی ندارید.'
+    );
+
     if ($order->payment_status === 'paid') {
         return redirect()->route('profile.index')
             ->with('error', 'این سفارش قبلا پرداخت شده است');

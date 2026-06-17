@@ -160,10 +160,17 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])
         ->name('customers.destroy');
+    // ----------- Order -----------
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+
+    
+    // ----------- Print&pull -----------
+    Route::get('orders/{order}/print', [AdminOrderController::class, 'print'])
+    ->name('orders.print');
+    Route::get('orders/poll', [AdminOrderController::class, 'poll'])
+    ->name('orders.poll');
 
 
-
-    // ----------- SMS System -----------
     Route::get('/customers/sms', [CustomerController::class, 'smsForm'])
         ->name('customers.smsForm');
 
@@ -172,8 +179,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
        
      
 });
-// صفحه checkout
-Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
 
 // ذخیره سفارش
 Route::post('/order', [OrderController::class, 'store'])->name('order.submit');
@@ -195,8 +201,8 @@ Route::post('/order/submit', [OrderController::class, 'store'])->name('order.sub
 
 // ثبت آدرس جدید (AJAX)
 Route::post('/addresses/store', [AddressController::class, 'store'])->name('address.store');
-Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
-// در فایل routes/web.php
+
+
 
 
 Route::patch('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
@@ -218,20 +224,27 @@ Route::post('/login/phone', [PhoneAuthController::class, 'sendOtp'])->name('phon
 Route::get('/login/otp', [PhoneAuthController::class, 'showOtpForm'])->name('otp.form');
 
 Route::post('/login/otp', [PhoneAuthController::class, 'verifyOtp'])->name('otp.verify');
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
-Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
+
+Route::middleware('customer.auth')->group(function () {
+
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile.index');
+        Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
 Route::get('/customer/addresses', [AddressController::class, 'index'])->name('address.index');
 Route::post('/customer/addresses', [AddressController::class, 'store'])->name('address.store');
-// Route::get('/payment',[paymentController::class,'payment'])->name('payment');
-// Route::get('/payment/verify',[paymentController::class,'verify'])->name('payment.verify');
-Route::get('/payment/verify', [PaymentController::class, 'verify'])
-    ->name('payment.verify');
-
 Route::get('/payment/{order}', [PaymentController::class, 'pay'])
     ->name('payment.pay');
 
-    Route::get('/admin/orders/{order}/print', [AdminOrderController::class, 'print'])
-    ->name('admin.orders.print');
-    Route::get('/admin/orders/poll', [AdminOrderController::class, 'poll'])
-    ->name('admin.orders.poll');
+// صفحه checkout
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
+});
+
+
+
+Route::get('/payment/verify', [PaymentController::class, 'verify'])
+    ->name('payment.verify');
+
+
+
