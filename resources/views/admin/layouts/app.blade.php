@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" direction="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,8 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            direction: rtl !important;
+            text-align: right;
         }
 
         .sidebar, .content, .glass-card {
@@ -317,12 +319,22 @@
     .form-control {
         width: 100%;
         padding: 10px;
-        border: 1px solid #ddd;
+        border: 1px solid #a0a0a0;
         border-radius: 10px;
         font-family: monospace;
         font-size: 0.85rem;
-        direction: ltr;
+        direction: rtl !important;
     }
+    select.glass-input {
+    color: #000; /* رنگ متن اصلی */
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* گزینه‌ها داخل dropdown */
+select.glass-input option {
+    color: #000;
+    background-color: #fff;
+}
 
     .save-btn {
         width: 100%;
