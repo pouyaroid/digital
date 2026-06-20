@@ -15,6 +15,7 @@ class PaymentController extends Controller
      */
    public function pay($orderId)
 {
+    // dd(url('/payment/verify'));
     
     $order = Order::findOrFail($orderId);
 
@@ -48,7 +49,8 @@ class PaymentController extends Controller
      */
     public function verify(Request $request)
     {
-        // dd($request->all());
+
+       
         
         $authority = $request->Authority;
         $status = $request->Status;

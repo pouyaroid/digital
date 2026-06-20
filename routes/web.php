@@ -2,47 +2,37 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Controllers
+
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ContactSectionController;
 use App\Http\Controllers\CafeHeaderController;
 use App\Http\Controllers\CafeCategoryController;
 use App\Http\Controllers\CafeItemController;
-use App\Http\Controllers\ContactSectionController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\PaymentController;
-use App\Models\Address;
-use App\Models\Customer;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Auth\PhoneAuthController;
-
-use App\Http\Controllers\ProfileController;
-
-
-// Fortify
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
-
-// QR Code
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
 use Endroid\QrCode\RoundBlockSizeMode;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\AddressController;
-use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\AdminController;
-use Symfony\Component\HttpFoundation\Request;
 
-// ---------------- Public Routes (No middleware) ----------------
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/payment/verify', [PaymentController::class, 'verify'])
+    ->name('payment.verify');
 
-// صفحه اصلی سایت
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// صفحه ورود
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-    ->middleware('guest')
-    ->name('login');
-
 
 Route::get('/dynamic-style.css', function () {
     return response()
@@ -50,21 +40,48 @@ Route::get('/dynamic-style.css', function () {
         ->header('Content-Type', 'text/css');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Auth Routes
+|--------------------------------------------------------------------------
+*/
 
+Route::middleware('guest')->group(function () {
 
-// ---------------- Admin Routes (Protected) ----------------
-Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
 
-    // Dashboard با QR Code
+    Route::get('/login/phone', [PhoneAuthController::class, 'showPhoneForm'])
+        ->name('phone.form');
+
+    Route::post('/login/phone', [PhoneAuthController::class, 'sendOtp'])
+        ->name('phone.send');
+
+    Route::get('/login/otp', [PhoneAuthController::class, 'showOtpForm'])
+        ->name('otp.form');
+
+    Route::post('/login/otp', [PhoneAuthController::class, 'verifyOtp'])
+        ->name('otp.verify');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('auth')
+    ->group(function () {
+
     Route::get('/', function () {
-
-        $url = url('/');
 
         $builder = new Builder(
             writer: new SvgWriter(),
             writerOptions: [],
             validateResult: false,
-            data: $url,
+            data: url('/'),
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: ErrorCorrectionLevel::High,
             size: 300,
@@ -72,179 +89,83 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
             roundBlockSizeMode: RoundBlockSizeMode::Margin,
         );
 
-        $result = $builder->build();
-        $svg = $result->getString();
-
-        return view('admin.dashboard', ['qr' => $svg]);
+        return view('admin.dashboard', [
+            'qr' => $builder->build()->getString()
+        ]);
     })->name('dashboard');
 
+    // Cafe Header
+    Route::get('/cafe-header/edit', [CafeHeaderController::class, 'edit'])->name('cafe-header.edit');
+    Route::put('/cafe-header/update', [CafeHeaderController::class, 'update'])->name('cafe-header.update');
+    Route::post('/cafe-header/store', [CafeHeaderController::class, 'store'])->name('cafe-header.store');
+    Route::delete('/cafe-header/delete', [CafeHeaderController::class, 'destroy'])->name('cafe-header.destroy');
 
+    // Categories
+    Route::get('/categories', [CafeCategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categories', [CafeCategoryController::class, 'store'])->name('categories.store');
+    Route::delete('/categories/{id}', [CafeCategoryController::class, 'destroy'])->name('categories.destroy');
 
-    // ----------- Cafe Header -----------
-    Route::get('/cafe-header/edit', [CafeHeaderController::class, 'edit'])
-        ->name('cafe-header.edit');
+    // Items
+    Route::get('/items', [CafeItemController::class, 'index'])->name('items.index');
+    Route::post('/items', [CafeItemController::class, 'store'])->name('items.store');
+    Route::get('/items/{id}/edit', [CafeItemController::class, 'edit'])->name('items.edit');
+    Route::put('/items/{id}', [CafeItemController::class, 'update'])->name('items.update');
+    Route::delete('/items/{id}', [CafeItemController::class, 'destroy'])->name('items.destroy');
 
-    Route::put('/cafe-header/update', [CafeHeaderController::class, 'update'])
-        ->name('cafe-header.update');
+    // Contact
+    Route::get('/contact', [ContactSectionController::class, 'edit'])->name('contact.edit');
+    Route::put('/contact', [ContactSectionController::class, 'update'])->name('contact.update');
 
-    Route::post('/cafe-header/store', [CafeHeaderController::class, 'store'])
-        ->name('cafe-header.store');
+    // Settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 
-    Route::delete('/cafe-header/delete', [CafeHeaderController::class, 'destroy'])
-        ->name('cafe-header.destroy');
+    // Customers
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
-
-
-    // ----------- Categories -----------
-    Route::get('/categories', [CafeCategoryController::class, 'index'])
-        ->name('cafe.categories.index');
-
-    Route::post('/categories', [CafeCategoryController::class, 'store'])
-        ->name('cafe.categories.store');
-    Route::delete('categories/delete/{id}',[CafeCategoryController::class,'destroy'])
-        ->name('categories.destroy'); 
-        
-    
-
-
-
-    // ----------- Items -----------
-    Route::get('/items', [CafeItemController::class, 'index'])
-        ->name('cafe.items.index');
-
-    Route::post('/items', [CafeItemController::class, 'store'])
-        ->name('cafe.items.store');
-    Route::delete('/items/{id}',[CafeItemController::class,'destroy'])
-        ->name('cafe.items.destroy');
-    Route::put('/items/{id}',[CafeItemController::class,'update'])
-        ->name('cafe.items.update');
-        
-    Route::get('/items/edit/{id}',[CafeItemController::class,'edit'])
-        ->name('cafe.items.edit');
-
-
-
-    // ----------- Contact Section -----------
-    Route::get('/contact', [ContactSectionController::class, 'edit'])
-        ->name('contact.edit');
-
-    Route::put('/contact', [ContactSectionController::class, 'update'])
-        ->name('contact.update');
-
-
-
-    // ----------- Settings -----------
-    Route::get('/settings', [SettingController::class, 'index'])
-        ->name('settings.index');
-
-    Route::post('/settings', [SettingController::class, 'update'])
-        ->name('settings.update');
-
-
-
-    // ----------- Customers -----------
-    Route::get('/customers', [CustomerController::class, 'index'])
-        ->name('customers.index');
-
-    Route::get('/customers/create', [CustomerController::class, 'create'])
-        ->name('customers.create');
-
-    Route::post('/customers', [CustomerController::class, 'store'])
-        ->name('customers.store');
-
-    Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])
-        ->name('customers.edit');
-
-    Route::put('/customers/{customer}', [CustomerController::class, 'update'])
-        ->name('customers.update');
-
-    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])
-        ->name('customers.destroy');
-    // ----------- Order -----------
+    // Orders
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}/print', [AdminOrderController::class, 'print'])->name('orders.print');
+    Route::get('/orders/poll', [AdminOrderController::class, 'poll'])->name('orders.poll');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
-    
-    // ----------- Print&pull -----------
-    Route::get('orders/{order}/print', [AdminOrderController::class, 'print'])
-    ->name('orders.print');
-    Route::get('orders/poll', [AdminOrderController::class, 'poll'])
-    ->name('orders.poll');
+    // SMS
+    Route::get('/customers/sms', [CustomerController::class, 'smsForm'])->name('customers.smsForm');
+    Route::post('/customers/sms/send', [CustomerController::class, 'sendSms'])->name('customers.sendSms');
 
-
-    Route::get('/customers/sms', [CustomerController::class, 'smsForm'])
-        ->name('customers.smsForm');
-
-    Route::post('/customers/sms/send', [CustomerController::class, 'sendSms'])
-        ->name('customers.sendSms');
-       
-     
-});
-
-
-// ذخیره سفارش
-Route::post('/order', [OrderController::class, 'store'])->name('order.submit');
-
-// ذخیره آدرس جدید
-Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
-
-// گرفتن آدرس‌ها بر اساس شماره موبایل
-
-
-// صفحه checkout
-Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-
-// ثبت سفارش نهایی
-Route::post('/order/submit', [OrderController::class, 'store'])->name('order.submit');
-
-// گرفتن آدرس‌ها بر اساس شماره موبایل (AJAX)
-
-
-// ثبت آدرس جدید (AJAX)
-Route::post('/addresses/store', [AddressController::class, 'store'])->name('address.store');
-
-
-
-
-Route::patch('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
-
-Route::prefix('admin')->middleware('auth')->group(function () {
-
+    // Menu settings
     Route::get('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'index'])
-        ->name('admin.menu-settings');
+        ->name('menu-settings.index');
 
     Route::post('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'update'])
-        ->name('admin.menu-settings.update');
+        ->name('menu-settings.update');
 });
 
-
-Route::get('/login/phone', [PhoneAuthController::class, 'showPhoneForm'])->name('phone.form');
-
-Route::post('/login/phone', [PhoneAuthController::class, 'sendOtp'])->name('phone.send');
-
-Route::get('/login/otp', [PhoneAuthController::class, 'showOtpForm'])->name('otp.form');
-
-Route::post('/login/otp', [PhoneAuthController::class, 'verifyOtp'])->name('otp.verify');
-
+/*
+|--------------------------------------------------------------------------
+| Customer Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('customer.auth')->group(function () {
 
-    Route::get('/profile', [ProfileController::class, 'index'])
-        ->name('profile.index');
-        Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
-Route::get('/customer/addresses', [AddressController::class, 'index'])->name('address.index');
-Route::post('/customer/addresses', [AddressController::class, 'store'])->name('address.store');
-Route::get('/payment/{order}', [PaymentController::class, 'pay'])
-    ->name('payment.pay');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 
-// صفحه checkout
-Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 
+    Route::post('/order', [OrderController::class, 'store'])->name('order.submit');
+
+    Route::get('/customer/addresses', [AddressController::class, 'index'])->name('address.index');
+    Route::post('/customer/addresses', [AddressController::class, 'store'])->name('address.store');
+
+    Route::get('/payment/{order}', [PaymentController::class, 'pay'])->name('payment.pay');
 });
 
 
 
-Route::get('/payment/verify', [PaymentController::class, 'verify'])
-    ->name('payment.verify');
-
-
-
+  

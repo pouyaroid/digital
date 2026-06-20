@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    /* --- استایل‌های اختصاصی پنل کاربری (اسنپ فود استایل) --- */
+ 
     :root {
         --primary: #ef394e;
         --primary-light: #fff0f1;

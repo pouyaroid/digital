@@ -343,7 +343,7 @@
 
     // ─── تنظیمات ───────────────────────────────────────────────
     const POLL_INTERVAL    = 10000; // هر 10 ثانیه
-    const POLL_URL         = "{{ route('admin.orders.poll') }}";
+    const POLL_URL = @json(url('/admin/orders/poll'));
     const CSRF_TOKEN       = "{{ csrf_token() }}";
 
     // بزرگ‌ترین id موجود در صفحه را به عنوان نقطه شروع می‌گیریم
