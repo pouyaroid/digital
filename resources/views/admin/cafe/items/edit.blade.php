@@ -8,7 +8,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-<form action="{{ route('admin.cafe.items.update', $item->id) }}"
+<form action="{{ route('admin.items.update', $item->id) }}"
       method="POST"
       enctype="multipart/form-data"
       class="card p-4 glass-card">
@@ -100,7 +100,7 @@
     </div>
 
     <button class="btn btn-primary mt-3">ذخیره تغییرات</button>
-    <a href="{{ route('admin.cafe.items.index') }}" class="btn btn-secondary mt-3">
+    <a href="{{ route('admin.items.index') }}" class="btn btn-secondary mt-3">
         بازگشت
     </a>
 </form>

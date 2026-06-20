@@ -113,11 +113,11 @@
                             <td>{{ $item->category->name }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('admin.cafe.items.edit', $item->id) }}"
+                                    <a href="{{ route('admin.items.edit', $item->id) }}"
                                        class="btn btn-warning btn-sm flex-fill text-center">
                                         ویرایش
                                     </a>
-                                    <form action="{{ route('admin.cafe.items.destroy', $item->id) }}"
+                                    <form action="{{ route('admin.items.destroy', $item->id) }}"
                                           method="POST"
                                           onsubmit="return confirm('حذف شود؟')">
                                         @csrf
@@ -162,11 +162,11 @@
                         </div>
 
                         <div class="d-flex gap-2 mt-2">
-                            <a href="{{ route('admin.cafe.items.edit', $item->id) }}"
+                            <a href="{{ route('admin.items.edit', $item->id) }}"
                                class="btn btn-warning btn-sm flex-fill">
                                 ویرایش
                             </a>
-                            <form action="{{ route('admin.cafe.items.destroy', $item->id) }}"
+                            <form action="{{ route('admin.items.destroy', $item->id) }}"
                                   method="POST"
                                   class="flex-fill"
                                   onsubmit="return confirm('حذف شود؟')">
