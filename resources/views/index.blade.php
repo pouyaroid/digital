@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ 'منو ' . ($header->cafe_name ?? 'کافه بدون نام') }}</title>
 
-   
     <link rel="stylesheet" href="/dynamic-style.css">
 
-
     <style>
-       
     </style>
 </head>
 <body>
@@ -41,11 +38,11 @@
                 <p class="hero-tagline">{{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}</p>
     
                 <div class="hero-pills">
-                    <span class="hero-pill pill-open">الان باز است</span>
+                    {{-- <span class="hero-pill pill-open">الان باز است</span> --}}
                     <span class="hero-pill pill-info">📍 {{ $contact->address ?? 'آدرس ثبت نشده' }}</span>
                 </div>
     
-                {{-- SOCIAL + CONTACT --}}
+                {{-- SOCIAL + CONTACT + LOGIN/PANEL --}}
                 <div class="hero-actions">
 
                     {{-- Instagram --}}
@@ -54,12 +51,10 @@
                            target="_blank"
                            class="hero-icon-btn"
                            aria-label="Instagram">
-                
                             <svg viewBox="0 0 24 24" width="20" height="20">
                                 <path fill="currentColor"
                                     d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5a5 5 0 110 10 5 5 0 010-10zm6-1.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/>
                             </svg>
-                
                         </a>
                     @endif
                 
@@ -67,16 +62,36 @@
                     <a href="#contact-footer"
                        class="hero-icon-btn"
                        aria-label="Contact">
-                
                         <svg viewBox="0 0 24 24" width="20" height="20">
                             <path fill="currentColor"
                                 d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
                         </svg>
-                
                     </a>
+
+                    {{-- Login / User Panel (Customer Guard) --}}
+                    @if($isCustomerLoggedIn)
+                        <a href="{{ route('profile.index') }}"
+                           class="hero-icon-btn"
+                           aria-label="پنل کاربری"
+                           title="پنل کاربری">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </a>
+                    @else
+                        <a href="{{ route('phone.form') }}"
+                           class="hero-icon-btn"
+                           aria-label="ورود"
+                           title="ورود">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor" d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2z"/>
+                            </svg>
+                        </a>
+                    @endif
                 
                 </div>
-                
+            </div>
+        </div>
     </header>
 
     {{-- ───── CATEGORY NAV ───── --}}
@@ -201,15 +216,11 @@
                     @if($orderingEnabled && $avail)
                     <div class="order-controls">
                         <div class="qty-wrap">
-                
                             {{-- + سمت چپ --}}
                             <button class="qty-btn increase-btn" data-id="{{ $item->id }}">+</button>
-                
                             <span class="qty-num" id="qty-{{ $item->id }}">1</span>
-                
                             {{-- − سمت راست --}}
                             <button class="qty-btn decrease-btn" data-id="{{ $item->id }}">−</button>
-                
                         </div>
                 
                         <button
@@ -221,7 +232,7 @@
                             افزودن
                         </button>
                     </div>
-                @endif
+                    @endif
                 </div>
             </div>
 
