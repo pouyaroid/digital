@@ -247,6 +247,7 @@
                     <th>جمع کل</th>
                     <th>وضعیت</th>
                     <th>روش پرداخت</th>
+                    <th>وضعیت پرداخت</th>
                     <th>تاریخ</th>
                     <th>چاپ</th>
                 </tr>
@@ -255,7 +256,7 @@
 
                 @if($orders->isEmpty())
                     <tr id="empty-row">
-                        <td colspan="11">
+                        <td colspan="12">
                             <div class="empty-state">
                                 <span class="empty-icon">📭</span>
                                 <p>هیچ سفارشی ثبت نشده است.</p>
@@ -316,6 +317,35 @@
                             </form>
                         </td>
                         <td data-label="روش پرداخت">{{ $paymentLabel }}</td>
+                        <td data-label="وضعیت پرداخت">
+
+                            @if($order->payment_method === 'cash')
+                                <span style="background:#dbeafe;color:#1d4ed8;padding:4px 8px;border-radius:6px;">
+                                    پرداخت در محل
+                                </span>
+                        
+                            @elseif(optional($order->payments)->status === 'success')
+                                <span style="background:#dcfce7;color:#166534;padding:4px 8px;border-radius:6px;">
+                                    پرداخت موفق
+                                </span>
+                        
+                            @elseif(optional($order->payments)->status === 'pending')
+                                <span style="background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:6px;">
+                                    در انتظار پرداخت
+                                </span>
+                        
+                            @elseif(optional($order->payments)->status === 'failed')
+                                <span style="background:#fee2e2;color:#991b1b;padding:4px 8px;border-radius:6px;">
+                                    پرداخت ناموفق
+                                </span>
+                        
+                            @else
+                                <span style="background:#f3f4f6;color:#6b7280;padding:4px 8px;border-radius:6px;">
+                                    نامشخص
+                                </span>
+                            @endif
+                        
+                        </td>
                         <td data-label="تاریخ"><small>{{ \Hekmatinasser\Verta\Verta::instance($order->created_at)->format('Y/m/d H:i') }}</small></td>
                         <td data-label="چاپ">
                             <a href="{{ route('admin.orders.print', $order->id) }}" target="_blank"

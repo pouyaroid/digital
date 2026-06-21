@@ -179,6 +179,22 @@
         td:first-child { flex-direction: row; }
         td:first-child::before { order: 2; margin-right: auto; margin-left: 8px; }
     }
+    .logout-btn{
+    width:100%;
+    border:none;
+    background:none;
+    text-align:right;
+    padding:12px 15px;
+    cursor:pointer;
+    color:#dc3545;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logout-btn:hover{
+    background:#fff5f5;
+}
 </style>
 @endpush
 
@@ -188,14 +204,27 @@
     
     <!-- ناوبری موبایل -->
     <nav class="mobile-nav d-lg-none">
+
+        <a href="{{ route('home') }}" class="nav-item">
+            <i class="ri-home-5-line"></i> خانه
+        </a>
+    
         <a href="#addresses" class="nav-item active" onclick="switchSection(this)">
             <i class="ri-map-pin-line"></i> آدرس‌ها
         </a>
+    
         <a href="#orders" class="nav-item" onclick="switchSection(this)">
             <i class="ri-file-list-3-line"></i> سفارش‌ها
         </a>
+    
+        <form action="{{ route('customer.logout') }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" class="nav-item border-0 bg-transparent">
+                <i class="ri-logout-box-r-line"></i> خروج
+            </button>
+        </form>
+    
     </nav>
-
     <div class="grid-layout">
         
         {{-- Sidebar (Desktop Only) --}}
@@ -209,8 +238,36 @@
             </div>
 
             <ul class="desktop-menu">
-                <li><a href="#addresses" class="active"><i class="ri-map-pin-line"></i> مدیریت آدرس‌ها</a></li>
-                <li><a href="#orders"><i class="ri-file-list-3-line"></i> سفارش‌های من</a></li>
+                <li>
+                    <a href="{{ route('home') }}">
+                        <i class="ri-home-5-line"></i>
+                        خانه
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="#addresses" class="active">
+                        <i class="ri-map-pin-line"></i>
+                        مدیریت آدرس‌ها
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="#orders">
+                        <i class="ri-file-list-3-line"></i>
+                        سفارش‌های من
+                    </a>
+                </li>
+            
+                <li>
+                    <form action="{{ route('customer.logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="logout-btn">
+                            <i class="ri-logout-box-r-line"></i>
+                            خروج
+                        </button>
+                    </form>
+                </li>
             </ul>
         </aside>
 

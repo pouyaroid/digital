@@ -22,6 +22,7 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
 use Endroid\QrCode\RoundBlockSizeMode;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -166,6 +167,16 @@ Route::middleware('customer.auth')->group(function () {
     Route::get('/payment/{order}', [PaymentController::class, 'pay'])->name('payment.pay');
 });
 
+Route::post('/customer/logout', function () {
 
+    Auth::guard('customer')->logout();
 
-  
+    request()->session()->invalidate();
+
+    request()->session()->regenerateToken();
+
+    request()->session()->regenerate();
+
+    return redirect()->route('home');
+
+})->name('customer.logout');
