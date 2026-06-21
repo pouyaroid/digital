@@ -37,6 +37,7 @@ class OrderController extends Controller
             'address_id'     => 'required|exists:addresses,id',
             'cart'           => 'required|array|min:1',
             'payment_method' => 'required|in:online,cash',
+            'note'           => 'nullable|string|max:1000',
         ]);
 
         $customer = auth('customer')->user();
@@ -85,6 +86,7 @@ class OrderController extends Controller
                 'total_price'    => $totalPrice,
                 'status'         => 'pending',
                 'payment_method' => $request->payment_method,
+                'note'           => $request->note,
             ]);
 
             // 📦 آیتم‌ها

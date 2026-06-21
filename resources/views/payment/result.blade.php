@@ -8,11 +8,7 @@
     <!-- رفرش خودکار به صفحه پروفایل بعد از 5 ثانیه -->
     <meta http-equiv="refresh" content="5;url={{ route('profile.index') }}">
 
-    <!-- فونت وزیرمتن -->
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    
-    <!-- آیکون‌های RemixIcon -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
 
     <style>
         :root {

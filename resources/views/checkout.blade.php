@@ -90,7 +90,7 @@
             @endif
     
         @endif
-    
+        <textarea name="note" placeholder="توضیحات سفارش (اختیاری)" class="form-control"></textarea>
     </div>
 
     {{-- فرم ثبت نهایی --}}
@@ -305,6 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.disabled = true;
 
         const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        const note = document.querySelector('textarea[name="note"]').value;
 
         fetch(ORDER_SUBMIT_URL, {
             method: 'POST',
@@ -316,7 +317,8 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({
                 cart,
                 address_id: addressId,
-                payment_method: paymentMethod
+                payment_method: paymentMethod,
+                note: note
             })
         })
         .then(res => res.json())

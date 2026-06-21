@@ -249,6 +249,7 @@
                     <th>روش پرداخت</th>
                     <th>وضعیت پرداخت</th>
                     <th>تاریخ</th>
+                    <th>توضیحات</th>
                     <th>چاپ</th>
                 </tr>
             </thead>
@@ -256,7 +257,7 @@
 
                 @if($orders->isEmpty())
                     <tr id="empty-row">
-                        <td colspan="12">
+                        <td colspan="13">
                             <div class="empty-state">
                                 <span class="empty-icon">📭</span>
                                 <p>هیچ سفارشی ثبت نشده است.</p>
@@ -347,6 +348,15 @@
                         
                         </td>
                         <td data-label="تاریخ"><small>{{ \Hekmatinasser\Verta\Verta::instance($order->created_at)->format('Y/m/d H:i') }}</small></td>
+                        <td data-label="توضیحات مشتری">
+                            @if($order->note)
+                                <div style="max-width:250px; white-space:pre-wrap;">
+                                    {{ $order->note }}
+                                </div>
+                            @else
+                                <span style="color:#9ca3af;">-</span>
+                            @endif
+                        </td>
                         <td data-label="چاپ">
                             <a href="{{ route('admin.orders.print', $order->id) }}" target="_blank"
                                style="display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;background:#111827;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;">

@@ -498,6 +498,7 @@ select.glass-input option {
 
         .theme-header h2 { font-size: 1.3rem; }
     }
+    
     </style>
 </head>
 <body>
