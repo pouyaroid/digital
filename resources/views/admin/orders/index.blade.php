@@ -378,223 +378,241 @@
 
 {{-- ==================== JavaScript ==================== --}}
 <script>
-(function () {
-    'use strict';
-
-    // ─── تنظیمات ───────────────────────────────────────────────
-    const POLL_INTERVAL    = 10000; // هر 10 ثانیه
-    const POLL_URL = @json(url('/admin/orders/poll'));
-    const CSRF_TOKEN       = "{{ csrf_token() }}";
-
-    // بزرگ‌ترین id موجود در صفحه را به عنوان نقطه شروع می‌گیریم
-    let lastKnownId = getMaxOrderId();
-    let rowCounter  = document.querySelectorAll('#orders-tbody tr[data-order-id]').length;
-    let audioCtx    = null;
-
-    // ─── Web Audio: ساخت صدای بیپ ────────────────────────────
-    function createAudioContext() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        return audioCtx;
-    }
-
-    function playAlarm() {
-        try {
-            const ctx = createAudioContext();
-            const beeps = [0, 200, 400]; // سه بیپ با فاصله
-
-            beeps.forEach(delay => {
-                const oscillator = ctx.createOscillator();
-                const gainNode   = ctx.createGain();
-
-                oscillator.connect(gainNode);
-                gainNode.connect(ctx.destination);
-
-                oscillator.type      = 'sine';
-                oscillator.frequency.value = 880;
-                gainNode.gain.setValueAtTime(0.6, ctx.currentTime + delay / 1000);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay / 1000 + 0.3);
-
-                oscillator.start(ctx.currentTime + delay / 1000);
-                oscillator.stop(ctx.currentTime + delay / 1000 + 0.3);
-            });
-        } catch (e) {
-            console.warn('AudioContext error:', e);
-        }
-    }
-
-    // ─── Browser Notification ─────────────────────────────────
-    function requestNotificationPermission() {
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
-        }
-    }
-
-    function sendNotification(count) {
-        if (!('Notification' in window) || Notification.permission !== 'granted') return;
-
-        new Notification('📦 سفارش جدید!', {
-            body: `${count} سفارش جدید دریافت شد`,
-            icon: '/favicon.ico',
-            badge: '/favicon.ico',
-            tag: 'new-order',       // جلوگیری از تکرار نوتیفیکیشن
-            renotify: true,
-        });
-    }
-
-    function testNotification() {
-        if (!('Notification' in window)) {
-            alert('مرورگر شما از نوتیفیکیشن پشتیبانی نمی‌کند.');
-            return;
-        }
-        if (Notification.permission !== 'granted') {
-            Notification.requestPermission().then(perm => {
-                if (perm === 'granted') sendNotification(1);
-            });
-        } else {
-            sendNotification(1);
-        }
-    }
-
-    // ─── DOM Helper: بزرگ‌ترین id ─────────────────────────────
-    function getMaxOrderId() {
-        let maxId = 0;
-        document.querySelectorAll('#orders-tbody tr[data-order-id]').forEach(row => {
-            const id = parseInt(row.dataset.orderId, 10);
-            if (id > maxId) maxId = id;
-        });
-        return maxId;
-    }
-
-    // ─── وضعیت به فارسی ───────────────────────────────────────
-    const STATUS_LABELS = {
-        pending:   'درحال پردازش',
-        preparing: 'آماده‌سازی',
-        sent:      'ارسال شده',
-        delivered: 'تحویل داده شد',
-        canceled:  'لغو شده',
-    };
-
-    const STATUS_COLORS = {
-        pending:   '#f59e0b',
-        preparing: '#3b82f6',
-        sent:      '#8b5cf6',
-        delivered: '#10b981',
-        canceled:  '#ef4444',
-    };
-
-    const PAYMENT_LABELS = {
-        online: '💳 پرداخت آنلاین',
-        cash:   '💵 پرداخت در محل',
-    };
-
-    // ─── ساخت HTML یک ردیف سفارش ─────────────────────────────
-    function buildRow(order, rowNumber) {
-        const statusColor  = STATUS_COLORS[order.status]  || '#6b7280';
-        const statusLabel  = STATUS_LABELS[order.status]  || order.status;
-        const paymentLabel = PAYMENT_LABELS[order.payment_method] || '-';
-
-        const itemsHtml = order.items.length
-            ? `<ul class="order-items">${order.items.map(i => `
-                <li>
-                    <span class="item-name">${i.name}</span>
-                    <span class="item-detail">${i.quantity} عدد <span style="margin:0 4px">•</span> ${Number(i.price).toLocaleString('fa-IR')} تومان</span>
-                </li>`).join('')}
-              </ul>`
-            : '<span class="text-muted">-</span>';
-
-        const statusOptions = Object.entries(STATUS_LABELS).map(([val, label]) =>
-            `<option value="${val}" ${order.status === val ? 'selected' : ''}>${label}</option>`
-        ).join('');
-
-        return `
-        <tr class="new-order-row" data-order-id="${order.id}">
-            <td data-label="#">${rowNumber}</td>
-            <td data-label="شماره سفارش"><span style="font-family:sans-serif;font-weight:bold;">${order.id}</span></td>
-            <td data-label="شماره تماس">${order.phone}</td>
-            <td data-label="آدرس"><span style="max-width:200px;display:block;overflow:hidden;text-overflow:ellipsis;">${order.address}</span></td>
-            <td data-label="آیتم‌ها">${itemsHtml}</td>
-            <td data-label="تعداد کل">${order.total_quantity}</td>
-            <td data-label="جمع کل"><strong style="color:var(--primary-color);">${Number(order.total_price).toLocaleString('fa-IR')} <span style="font-size:0.8em">تومان</span></strong></td>
-            <td data-label="وضعیت">
-                <form action="${order.update_url}" method="POST" style="display:flex;align-items:center;gap:5px;">
-                    <input type="hidden" name="_token" value="${CSRF_TOKEN}">
-                    <input type="hidden" name="_method" value="PATCH">
-                    <div style="display:flex;align-items:center;background:#f3f4f6;padding:4px;border-radius:8px;border:1px solid #e5e7eb;">
-                        <span style="width:10px;height:10px;border-radius:50%;background-color:${statusColor};display:inline-block;margin-left:5px;"></span>
-                        <select name="status" onchange="this.form.submit()" style="border:none;background:transparent;padding:2px;font-size:0.9em;cursor:pointer;outline:none;">
-                            ${statusOptions}
-                        </select>
-                    </div>
-                </form>
-            </td>
-            <td data-label="روش پرداخت">${paymentLabel}</td>
-            <td data-label="تاریخ"><small>${order.created_at}</small></td>
-            <td data-label="چاپ">
-                <a href="${order.print_url}" target="_blank"
-                   style="display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;background:#111827;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;">
-                    🖨 چاپ
-                </a>
-            </td>
-        </tr>`;
-    }
-
-    // ─── Polling اصلی ─────────────────────────────────────────
-    async function pollOrders() {
-        try {
-            const res  = await fetch(`${POLL_URL}?last_id=${lastKnownId}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': CSRF_TOKEN,
-                }
-            });
-
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-            const data = await res.json();
-
-            if (data.orders && data.orders.length > 0) {
-                const tbody    = document.getElementById('orders-tbody');
-                const emptyRow = document.getElementById('empty-row');
-
-                // حذف ردیف "هیچ سفارشی وجود ندارد"
-                if (emptyRow) emptyRow.remove();
-
-                // اضافه کردن ردیف‌های جدید بالای جدول
-                data.orders.forEach(order => {
-                    rowCounter++;
-                    const tr = document.createElement('tbody');
-                    tr.innerHTML = buildRow(order, rowCounter);
-                    tbody.insertBefore(tr.firstElementChild, tbody.firstChild);
-
-                    // بروزرسانی بزرگ‌ترین id
-                    if (order.id > lastKnownId) lastKnownId = order.id;
-                });
-
-                // صدا + نوتیفیکیشن
-                playAlarm();
-                sendNotification(data.orders.length);
-
-                // بروزرسانی عنوان مرورگر
-                document.title = `(${data.orders.length} سفارش جدید) لیست سفارشات`;
-                setTimeout(() => { document.title = 'لیست سفارشات'; }, 5000);
+    (function () {
+        'use strict';
+    
+        const POLL_INTERVAL = 10000;
+        const POLL_URL = @json(url('/admin/orders/poll'));
+        const CSRF_TOKEN = "{{ csrf_token() }}";
+    
+        let lastKnownId = getMaxOrderId();
+        let audioCtx    = null;
+    
+        /* ─── Audio ─── */
+        function createAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-
-            // بروزرسانی وضعیت live indicator
-            document.getElementById('live-status').textContent = 'آنلاین - بروزرسانی خودکار';
-
-        } catch (err) {
-            console.error('Polling error:', err);
-            document.getElementById('live-status').textContent = 'خطا در اتصال - تلاش مجدد...';
+            return audioCtx;
         }
-    }
-
-    // ─── شروع ─────────────────────────────────────────────────
-    requestNotificationPermission();
-    setInterval(pollOrders, POLL_INTERVAL);
-
-})();
-</script>
+    
+        function playAlarm() {
+            try {
+                const ctx = createAudioContext();
+                [0, 200, 400].forEach(delay => {
+                    const oscillator = ctx.createOscillator();
+                    const gainNode   = ctx.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 880;
+                    gainNode.gain.setValueAtTime(0.6, ctx.currentTime + delay / 1000);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay / 1000 + 0.3);
+                    oscillator.start(ctx.currentTime + delay / 1000);
+                    oscillator.stop(ctx.currentTime + delay / 1000 + 0.3);
+                });
+            } catch (e) {
+                console.warn('AudioContext error:', e);
+            }
+        }
+    
+        /* ─── Notification ─── */
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+    
+        function sendNotification(count) {
+            if (!('Notification' in window) || Notification.permission !== 'granted') return;
+            new Notification('📦 سفارش جدید!', {
+                body: `${count} سفارش جدید دریافت شد`,
+                icon: '/favicon.ico',
+                badge: '/favicon.ico',
+                tag: 'new-order',
+                renotify: true,
+            });
+        }
+    
+        window.testNotification = function () {
+            if (!('Notification' in window)) {
+                alert('مرورگر شما از نوتیفیکیشن پشتیبانی نمی‌کند.');
+                return;
+            }
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission().then(perm => {
+                    if (perm === 'granted') sendNotification(1);
+                });
+            } else {
+                sendNotification(1);
+            }
+        };
+    
+        /* expose for inline onclick */
+        window.playAlarm = playAlarm;
+    
+        /* ─── Helpers ─── */
+        function getMaxOrderId() {
+            let maxId = 0;
+            document.querySelectorAll('#orders-tbody tr[data-order-id]').forEach(row => {
+                const id = parseInt(row.dataset.orderId, 10);
+                if (id > maxId) maxId = id;
+            });
+            return maxId;
+        }
+    
+        function renumberRows() {
+            document.querySelectorAll('#orders-tbody tr[data-order-id]').forEach((row, index) => {
+                const numCell = row.querySelector('td[data-label="#"]');
+                if (numCell) numCell.textContent = index + 1;
+            });
+        }
+    
+        const STATUS_LABELS = {
+            pending:   'درحال پردازش',
+            preparing: 'آماده‌سازی',
+            sent:      'ارسال شده',
+            delivered: 'تحویل داده شد',
+            canceled:  'لغو شده',
+        };
+    
+        const STATUS_COLORS = {
+            pending:   '#f59e0b',
+            preparing: '#3b82f6',
+            sent:      '#8b5cf6',
+            delivered: '#10b981',
+            canceled:  '#ef4444',
+        };
+    
+        const PAYMENT_LABELS = {
+            online: '💳 پرداخت آنلاین',
+            cash:   '💵 پرداخت در محل',
+        };
+    
+        function buildPaymentStatusHtml(order) {
+            if (order.payment_method === 'cash') {
+                return `<span style="background:#dbeafe;color:#1d4ed8;padding:4px 8px;border-radius:6px;">پرداخت در محل</span>`;
+            }
+            if (order.payment_status === 'success') {
+                return `<span style="background:#dcfce7;color:#166534;padding:4px 8px;border-radius:6px;">پرداخت موفق</span>`;
+            }
+            if (order.payment_status === 'pending') {
+                return `<span style="background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:6px;">در انتظار پرداخت</span>`;
+            }
+            if (order.payment_status === 'failed') {
+                return `<span style="background:#fee2e2;color:#991b1b;padding:4px 8px;border-radius:6px;">پرداخت ناموفق</span>`;
+            }
+            return `<span style="background:#f3f4f6;color:#6b7280;padding:4px 8px;border-radius:6px;">نامشخص</span>`;
+        }
+    
+        /* ═══════════════════════════════════════════
+           buildRow — دقیقاً ۱۳ ستون مطابق thead
+           ═══════════════════════════════════════════ */
+        function buildRow(order) {
+            const statusColor  = STATUS_COLORS[order.status] || '#6b7280';
+            const paymentLabel = PAYMENT_LABELS[order.payment_method] || '-';
+    
+            const itemsHtml = (order.items && order.items.length)
+                ? `<ul class="order-items">${order.items.map(i => `
+                    <li>
+                        <span class="item-name">${i.name}</span>
+                        <span class="item-detail">${i.quantity} عدد <span style="margin:0 4px">•</span> ${Number(i.price).toLocaleString('fa-IR')} تومان</span>
+                    </li>`).join('')}
+                  </ul>`
+                : '<span class="text-muted">-</span>';
+    
+            const statusOptions = Object.entries(STATUS_LABELS).map(([val, label]) =>
+                `<option value="${val}" ${order.status === val ? 'selected' : ''}>${label}</option>`
+            ).join('');
+    
+            const paymentStatusHtml = buildPaymentStatusHtml(order);
+    
+            const noteHtml = order.note
+                ? `<div style="max-width:250px; white-space:pre-wrap;">${order.note}</div>`
+                : `<span style="color:#9ca3af;">-</span>`;
+    
+            return `
+            <tr class="new-order-row" data-order-id="${order.id}">
+                <td data-label="#"></td>
+                <td data-label="شماره سفارش"><span style="font-family:sans-serif;font-weight:bold;">${order.id}</span></td>
+                <td data-label="شماره تماس">${order.phone ?? '-'}</td>
+                <td data-label="آدرس"><span style="max-width:200px;display:block;overflow:hidden;text-overflow:ellipsis;">${order.address ?? '-'}</span></td>
+                <td data-label="آیتم‌ها">${itemsHtml}</td>
+                <td data-label="تعداد کل">${order.total_quantity}</td>
+                <td data-label="جمع کل"><strong style="color:var(--primary-color);">${Number(order.total_price).toLocaleString('fa-IR')} <span style="font-size:0.8em">تومان</span></strong></td>
+                <td data-label="وضعیت">
+                    <form action="${order.update_url}" method="POST" style="display:flex;align-items:center;gap:5px;">
+                        <input type="hidden" name="_token" value="${CSRF_TOKEN}">
+                        <input type="hidden" name="_method" value="PATCH">
+                        <div style="display:flex;align-items:center;background:#f3f4f6;padding:4px;border-radius:8px;border:1px solid #e5e7eb;">
+                            <span style="width:10px;height:10px;border-radius:50%;background-color:${statusColor};display:inline-block;margin-left:5px;"></span>
+                            <select name="status" onchange="this.form.submit()" style="border:none;background:transparent;padding:2px;font-size:0.9em;cursor:pointer;outline:none;">
+                                ${statusOptions}
+                            </select>
+                        </div>
+                    </form>
+                </td>
+                <td data-label="روش پرداخت">${paymentLabel}</td>
+                <td data-label="وضعیت پرداخت">${paymentStatusHtml}</td>
+                <td data-label="تاریخ"><small>${order.created_at}</small></td>
+                <td data-label="توضیحات مشتری">${noteHtml}</td>
+                <td data-label="چاپ">
+                    <a href="${order.print_url}" target="_blank"
+                       style="display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;background:#111827;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;">
+                        🖨 چاپ
+                    </a>
+                </td>
+            </tr>`;
+        }
+    
+        /* ─── Polling ─── */
+        async function pollOrders() {
+            try {
+                const res = await fetch(`${POLL_URL}?last_id=${lastKnownId}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': CSRF_TOKEN,
+                    }
+                });
+    
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    
+                const data = await res.json();
+    
+                if (data.orders && data.orders.length > 0) {
+                    const tbody    = document.getElementById('orders-tbody');
+                    const emptyRow = document.getElementById('empty-row');
+    
+                    if (emptyRow) emptyRow.remove();
+    
+                    data.orders.forEach(order => {
+                        if (order.id > lastKnownId) lastKnownId = order.id;
+                        tbody.insertAdjacentHTML('afterbegin', buildRow(order));
+                    });
+    
+                    renumberRows();
+    
+                    playAlarm();
+                    sendNotification(data.orders.length);
+    
+                    document.title = `(${data.orders.length} سفارش جدید) لیست سفارشات`;
+                    setTimeout(() => { document.title = 'لیست سفارشات'; }, 5000);
+                }
+    
+                const liveStatus = document.getElementById('live-status');
+                if (liveStatus) liveStatus.textContent = 'آنلاین - بروزرسانی خودکار';
+    
+            } catch (err) {
+                console.error('Polling error:', err);
+                const liveStatus = document.getElementById('live-status');
+                if (liveStatus) liveStatus.textContent = 'خطا در اتصال - تلاش مجدد...';
+            }
+        }
+    
+        requestNotificationPermission();
+        setInterval(pollOrders, POLL_INTERVAL);
+    
+    })();
+    </script>
 
 @endsection

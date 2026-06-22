@@ -7,6 +7,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastMsg    = document.getElementById('toastMsg');
     let toastTimer;
 
+    /* ═══════════════════════════════════════════
+       THEME MANAGER — Dark / Light Mode
+       ═══════════════════════════════════════════ */
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlEl      = document.documentElement;
+    const STORAGE_KEY = 'cafe-menu-theme';
+
+    function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            htmlEl.setAttribute('data-theme', 'dark');
+        } else {
+            htmlEl.removeAttribute('data-theme');
+        }
+    }
+
+    function toggleTheme() {
+        const current = htmlEl.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const next    = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem(STORAGE_KEY, next);
+    }
+
+    function initTheme() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            applyTheme(saved);
+        } else {
+            applyTheme(getSystemTheme());
+        }
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+
+    initTheme();
+
+    /* ═══════════════════════════════════════════
+       CART & UI FUNCTIONS
+       ═══════════════════════════════════════════ */
     function toFarsiNum(n) {
         return String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
     }

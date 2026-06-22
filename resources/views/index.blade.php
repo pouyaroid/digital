@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ 'منو ' . ($header->cafe_name ?? 'کافه بدون نام') }}</title>
-
     <link rel="stylesheet" href="/dynamic-style.css">
-
-    <style>
-    </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -21,10 +18,16 @@
         $isCustomerLoggedIn = auth()->guard('customer')->check();
     @endphp
 
-    {{-- ───── HERO ───── --}}
+    {{-- ═══════ HERO ═══════ --}}
     <header class="hero">
         <div class="hero-glass">
-    
+
+            {{-- دکمه تغییر تم — داخل hero برای موبایل / fixed برای دسکتاپ --}}
+            <button id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز/شب">
+                <span class="theme-icon sun">☀️</span>
+                <span class="theme-icon moon">🌙</span>
+            </button>
+
             <div class="hero-logo-ring">
                 @if(!empty($header->logo))
                     <img src="{{ asset('storage/' . $header->logo) }}" alt="لوگو">
@@ -32,69 +35,47 @@
                     <div class="hero-logo-placeholder">{{ $header->coffee_emoji ?? '☕' }}</div>
                 @endif
             </div>
-    
+
             <div class="hero-info">
                 <h1 class="hero-name">{{ $header->cafe_name ?? 'کافه بدون نام' }}</h1>
                 <p class="hero-tagline">{{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}</p>
-    
+
                 <div class="hero-pills">
-                    {{-- <span class="hero-pill pill-open">الان باز است</span> --}}
                     <span class="hero-pill pill-info">📍 {{ $contact->address ?? 'آدرس ثبت نشده' }}</span>
                 </div>
-    
-                {{-- SOCIAL + CONTACT + LOGIN/PANEL --}}
-                <div class="hero-actions">
 
-                    {{-- Instagram --}}
+                <div class="hero-actions">
                     @if(!empty($contact->instagram_url))
-                        <a href="{{ $contact->instagram_url }}"
-                           target="_blank"
-                           class="hero-icon-btn"
-                           aria-label="Instagram">
+                        <a href="{{ $contact->instagram_url }}" target="_blank" class="hero-icon-btn" aria-label="Instagram">
                             <svg viewBox="0 0 24 24" width="20" height="20">
-                                <path fill="currentColor"
-                                    d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5a5 5 0 110 10 5 5 0 010-10zm6-1.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/>
+                                <path fill="currentColor" d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5a5 5 0 110 10 5 5 0 010-10zm6-1.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/>
                             </svg>
                         </a>
                     @endif
-                
-                    {{-- Phone -> scroll to footer --}}
-                    <a href="#contact-footer"
-                       class="hero-icon-btn"
-                       aria-label="Contact">
+                    <a href="#contact-footer" class="hero-icon-btn" aria-label="Contact">
                         <svg viewBox="0 0 24 24" width="20" height="20">
-                            <path fill="currentColor"
-                                d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+                            <path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
                         </svg>
                     </a>
-
-                    {{-- Login / User Panel (Customer Guard) --}}
                     @if($isCustomerLoggedIn)
-                        <a href="{{ route('profile.index') }}"
-                           class="hero-icon-btn"
-                           aria-label="پنل کاربری"
-                           title="پنل کاربری">
+                        <a href="{{ route('profile.index') }}" class="hero-icon-btn" aria-label="پنل کاربری" title="پنل کاربری">
                             <svg viewBox="0 0 24 24" width="20" height="20">
                                 <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                             </svg>
                         </a>
                     @else
-                        <a href="{{ route('phone.form') }}"
-                           class="hero-icon-btn"
-                           aria-label="ورود"
-                           title="ورود">
+                        <a href="{{ route('phone.form') }}" class="hero-icon-btn" aria-label="ورود" title="ورود">
                             <svg viewBox="0 0 24 24" width="20" height="20">
                                 <path fill="currentColor" d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2z"/>
                             </svg>
                         </a>
                     @endif
-                
                 </div>
             </div>
         </div>
     </header>
 
-    {{-- ───── CATEGORY NAV ───── --}}
+    {{-- ═══════ CATEGORY NAV ═══════ --}}
     <nav class="cat-nav" id="categoryNav">
         <div class="cat-nav-glass">
             <button class="nav-btn active" data-category="all">🍽️ همه</button>
@@ -106,27 +87,21 @@
         </div>
     </nav>
 
-    {{-- ───── SEARCH ───── --}}
+    {{-- ═══════ SEARCH ═══════ --}}
     <div class="search-wrap">
         <div class="search-glass">
             <span class="search-icon">🔍</span>
-            <input
-                id="searchInput"
-                class="search-input"
-                type="text"
-                placeholder="جستجو در منو…"
-                autocomplete="off"
-            >
+            <input id="searchInput" class="search-input" type="text" placeholder="جستجو در منو…" autocomplete="off">
         </div>
     </div>
 
-    {{-- ───── TOAST ───── --}}
+    {{-- ═══════ TOAST ═══════ --}}
     <div id="toast">
         <div class="toast-dot"></div>
         <span id="toastMsg"></span>
     </div>
 
-    {{-- ───── FLOATING CART ───── --}}
+    {{-- ═══════ FLOATING CART ═══════ --}}
     @if($orderingEnabled)
     <div id="floatingCart">
         <div class="fcart-inner">
@@ -140,50 +115,38 @@
     </div>
     @endif
 
-    {{-- ───── MENU GRID ───── --}}
+    {{-- ═══════ MENU GRID ═══════ --}}
     <main class="menu-wrap">
         <div class="menu-grid" id="menuGrid">
-
             @foreach($items as $index => $item)
-
             @php
                 $hasDisc   = !empty($item->discount_price);
                 $finalPrice= $hasDisc ? $item->discount_price : $item->price;
                 $discPct   = $hasDisc ? round((($item->price - $item->discount_price) / $item->price) * 100) : 0;
                 $avail     = (bool)$item->is_available;
             @endphp
-
-            <div
-                class="menu-card{{ !$avail ? ' unavailable' : '' }}"
-                data-category="category-{{ $item->category_id }}"
-                data-name="{{ mb_strtolower($item->name) }}"
-                style="animation-delay: {{ ($index % 12) * 0.055 }}s"
-            >
-                {{-- Image --}}
+            <div class="menu-card{{ !$avail ? ' unavailable' : '' }}"
+                 data-category="category-{{ $item->category_id }}"
+                 data-name="{{ mb_strtolower($item->name) }}"
+                 style="animation-delay: {{ ($index % 12) * 0.055 }}s">
                 <div class="card-img-wrap">
                     @if($item->image)
                         <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" loading="lazy">
                     @else
                         <div class="card-img-placeholder">🍽️</div>
                     @endif
-
                     @if($hasDisc && $discPct > 0)
                         <span class="badge-discount">٪{{ $discPct }} تخفیف</span>
                     @endif
-
                     @if(!$avail)
                         <div class="badge-unavail"><span>ناموجود</span></div>
                     @endif
                 </div>
-
-                {{-- Body --}}
                 <div class="card-body">
                     <h2 class="card-name">{{ $item->name }}</h2>
-
                     @if($item->description)
                         <p class="card-desc">{{ $item->description }}</p>
                     @endif
-
                     @if($item->tags)
                         <div class="card-tags">
                             @foreach(explode(',', $item->tags) as $tag)
@@ -191,15 +154,11 @@
                             @endforeach
                         </div>
                     @endif
-
                     @if($showCalories && $item->calories)
                         <span class="card-cal">🔥 {{ $item->calories }} کالری</span>
                     @endif
                 </div>
-
-                {{-- Footer --}}
                 <div class="card-footer">
-
                     @if($showPrices)
                         <div class="price-col">
                             @if($hasDisc)
@@ -212,69 +171,40 @@
                     @else
                         <div></div>
                     @endif
-
                     @if($orderingEnabled && $avail)
                     <div class="order-controls">
                         <div class="qty-wrap">
-                            {{-- + سمت چپ --}}
                             <button class="qty-btn increase-btn" data-id="{{ $item->id }}">+</button>
                             <span class="qty-num" id="qty-{{ $item->id }}">1</span>
-                            {{-- − سمت راست --}}
                             <button class="qty-btn decrease-btn" data-id="{{ $item->id }}">−</button>
                         </div>
-                
-                        <button
-                            class="add-btn"
-                            data-id="{{ $item->id }}"
-                            data-name="{{ $item->name }}"
-                            data-price="{{ $finalPrice }}"
-                        >
-                            افزودن
-                        </button>
+                        <button class="add-btn" data-id="{{ $item->id }}" data-name="{{ $item->name }}" data-price="{{ $finalPrice }}">افزودن</button>
                     </div>
                     @endif
                 </div>
             </div>
-
             @endforeach
-
         </div>
-
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">🔍</div>
             <p class="empty-text">موردی پیدا نشد</p>
         </div>
     </main>
 
-    {{-- ───── FOOTER ───── --}}
+    {{-- ═══════ FOOTER ═══════ --}}
     <footer id="contact-footer">
         <div class="footer-inner">
             <div class="footer-brand">{{ $header->cafe_name ?? 'کافه' }} <span>•</span></div>
-    
             <div class="footer-rows">
-                <div class="footer-row">
-                    <span class="footer-row-icon">📍</span>
-                    <span>{{ $contact->address ?? 'آدرس تعریف نشده' }}</span>
-                </div>
-    
-                <div class="footer-row">
-                    <span class="footer-row-icon">📞</span>
-                    <span>{{ $contact->phone ?? 'شماره تعریف نشده' }}</span>
-                </div>
-    
-                <div class="footer-row">
-                    <span class="footer-row-icon">🕐</span>
-                    <span>{{ $contact->working_hours ?? 'ساعات کاری تعریف نشده' }}</span>
-                </div>
+                <div class="footer-row"><span class="footer-row-icon">📍</span><span>{{ $contact->address ?? 'آدرس تعریف نشده' }}</span></div>
+                <div class="footer-row"><span class="footer-row-icon">📞</span><span>{{ $contact->phone ?? 'شماره تعریف نشده' }}</span></div>
+                <div class="footer-row"><span class="footer-row-icon">🕐</span><span>{{ $contact->working_hours ?? 'ساعات کاری تعریف نشده' }}</span></div>
             </div>
-    
             <hr class="footer-sep">
-    
             <p class="footer-copy">طراحی شده با ❤️</p>
         </div>
     </footer>
 
-    {{-- ───── JS ───── --}}
     <script src="{{ asset('assets/js/menu.js') }}"></script>
 </body>
 </html>

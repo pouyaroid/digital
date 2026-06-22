@@ -73,6 +73,8 @@ public function poll(Request $request)
                                         ->format('Y/m/d H:i'),
                 'print_url'      => route('admin.orders.print', $order->id),
                 'update_url'     => route('admin.orders.updateStatus', $order->id),
+                'payment_status'  => optional($order->payments)->status, // ← ضروری
+                'note'            => $order->note,    
             ];
         });
 
