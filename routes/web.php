@@ -180,3 +180,15 @@ Route::post('/customer/logout', function () {
     return redirect()->route('home');
 
 })->name('customer.logout');
+
+
+
+
+ // تنظیمات PWA
+ Route::get('/settings/pwa', [SettingController::class, 'pwa'])
+ ->name('admin.settings.pwa');
+
+// ذخیره تنظیمات
+Route::post('/settings', [SettingController::class, 'update'])
+ ->name('admin.settings.update');
+ 
