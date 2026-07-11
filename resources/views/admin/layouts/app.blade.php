@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #292e55 0%, #006aff 100%);
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            overflow-x:auto;
             direction: rtl !important;
             text-align: right;
         }
@@ -227,7 +227,7 @@
                 font-size: 0.9rem;
             }
         }
-        theme-builder {
+        .theme-builder {
         max-width: 1200px;
         margin: auto;
         padding: 20px;
@@ -523,6 +523,7 @@ select.glass-input option {
     <a href="{{ route('admin.customers.index') }}" class="menu-item">👥 مشتریان</a>
     <a href="{{ route('admin.settings.index') }}" class="menu-item">⚙️ تنظیمات استایل</a>
     <a href="{{ route('admin.menu-settings.index') }}" class="menu-item">⚙️ تنظیمات منو</a>
+    <a href="{{ route('admin.settings.pwa') }}" class="menu-item">⚙️ تنظیمات Pwa</a>
     <a href="{{ route('admin.customers.smsForm') }}" class="menu-item">✉️ ارسال SMS</a>
     <a href="{{ route('home') }}" class="menu-item">👀 مشاهده منو</a>
     

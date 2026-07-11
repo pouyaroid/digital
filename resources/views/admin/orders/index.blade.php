@@ -18,8 +18,9 @@
         font-family: 'Vazir', sans-serif;
         padding: 24px;
         background-color: var(--bg-color);
-        min-height: 100vh;
+        
         direction: rtl;
+        
     }
 
     .orders-header {
@@ -90,7 +91,9 @@
         background-color: var(--card-bg);
         border-radius: 12px;
         box-shadow: var(--shadow-sm);
-        overflow: hidden;
+        overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
         border: 1px solid var(--border-color);
     }
 
