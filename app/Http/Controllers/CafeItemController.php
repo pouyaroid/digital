@@ -45,7 +45,7 @@ class CafeItemController extends Controller
     public function destroy($id){
         $cafe=CafeItem::find($id);
         $cafe->delete();
-        return redirect()->route('admin.cafe.items.index');
+        return redirect()->route('admin.items.index');
 
     }
     public function update(Request $request, $id)
