@@ -17,7 +17,7 @@
     .orders-wrapper {
         font-family: 'Vazir', sans-serif;
         padding: 24px;
-        background-color: var(--bg-color);
+        /* background-color: var(--bg-color); */
         
         direction: rtl;
         
@@ -180,45 +180,108 @@
     .orders-pagination .active span { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
 
     @media (max-width: 768px) {
-        .orders-wrapper { padding: 16px; }
 
-        .orders-table, .orders-table thead, .orders-table tbody,
-        .orders-table th, .orders-table td, .orders-table tr { display: block; width: 100%; }
+.orders-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
 
-        .orders-table thead { display: none; }
+.orders-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
 
-        .orders-table tr {
-            margin-bottom: 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
+.orders-header h2 {
+    font-size: 20px;
+}
 
-        .orders-table td {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            text-align: right;
-            padding: 12px 16px;
-            border-bottom: 1px solid #f3f4f6;
-            white-space: normal;
-        }
+.btn-test-sound {
+    width: 100%;
+    justify-content: center;
+}
 
-        .orders-table td::before {
-            content: attr(data-label);
-            font-weight: 700;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-left: 12px;
-            min-width: 80px;
-        }
 
-        .orders-table td[data-label="آیتم‌ها"] { display: block; }
-        .orders-table td[data-label="آیتم‌ها"]::before { margin-bottom: 8px; display: block; }
-        .orders-table tr:last-child { margin-bottom: 0; }
-    }
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+
+.orders-table {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+
+.orders-table thead {
+    display: none;
+}
+
+
+.orders-table tbody,
+.orders-table tr,
+.orders-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.orders-table tr {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+
+.orders-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: right;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+
+.orders-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-left: 12px;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+
+.orders-table td[data-label="آیتم‌ها"] {
+    display: block;
+}
+
+.orders-table td[data-label="آیتم‌ها"]::before {
+    display: block;
+    margin-bottom: 8px;
+}
+
+
+.orders-table tr:last-child {
+    margin-bottom: 0;
+}
+
+}
 </style>
 
 <div class="orders-wrapper">

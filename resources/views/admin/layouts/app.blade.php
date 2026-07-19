@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پنل مدیریت</title>
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-icons.min.css') }}">
+  
+   
     <style>
         body {
             font-family: "Vazir", sans-serif;
@@ -97,23 +99,32 @@
 
         /* هامبورگر منو برای موبایل */
         .hamburger {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            display: none;
-            backdrop-filter: blur(6px);
-        }
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 99999;
 
-        .hamburger i {
-            color: white;
-            font-size: 20px;
-        }
+    width: 45px;
+    height: 45px;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+}
+
+.hamburger i {
+    color: white;
+    font-size: 26px;
+    line-height: 1;
+}
 
         /* اورلی برای موبایل */
         .overlay {
@@ -507,7 +518,7 @@ select.glass-input option {
 <div class="overlay" id="overlay"></div>
 
 <button class="hamburger" id="hamburger">
-    <i class="fas fa-bars"></i>
+    <i class="bi bi-list"></i>
 </button>
 
 <div class="sidebar" id="sidebar">
