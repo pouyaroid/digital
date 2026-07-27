@@ -93,12 +93,7 @@
 
                 </div>
 
-                @if(Route::has('password.request'))
-                    <a href="{{ route('password.request') }}"
-                       class="text-info text-decoration-none">
-                        فراموشی رمز عبور؟
-                    </a>
-                @endif
+               
 
             </div>
 
@@ -112,20 +107,7 @@
 
         </form>
 
-        <div class="text-center mt-4">
-
-            <span class="text-muted-custom">
-                حساب کاربری ندارید؟
-            </span>
-
-            <a href="{{ route('register') }}"
-               class="text-info fw-bold text-decoration-none">
-
-                ثبت نام کنید
-
-            </a>
-
-        </div>
+     
 
     </div>
 

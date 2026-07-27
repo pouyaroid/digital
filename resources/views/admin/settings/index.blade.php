@@ -3,15 +3,7 @@
 @section('content')
 
 <!-- استایل‌های مخصوص این صفحه (اصلاح شده برای ریسپانسیو بهتر) -->
-<style>
-    @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
 
-   
-
-    
-    
-
-</style>
 
 <div class="theme-builder">
 
