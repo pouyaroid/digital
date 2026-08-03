@@ -23,43 +23,8 @@
             <input type="text" name="cafe_tagline" value="{{ $header->cafe_tagline ?? '' }}" class="form-control glass-input">
         </div>
 
-        {{-- ایموجی --}}
-        <div class="col-md-6 position-relative">
-            <label>ایموجی قهوه / غذا</label>
-
-            <input
-                type="text"
-                name="coffee_emoji"
-                id="emojiInput"
-                value="{{ $header->coffee_emoji ?? '' }}"
-                class="form-control glass-input"
-                readonly
-                style="cursor: pointer;"
-            >
-
-            {{-- پنل ایموجی --}}
-            <div id="emojiPicker" class="emoji-picker">
-                @php
-                    $emojis = [
-                        '🍔','🍟','🌭','🍕','🥪','🥙','🌮','🌯','🥗','🥘','🍝','🥩','🍗','🍖','🍤','🍱','🍣','🍛','🍜',
-                        '🍚','🍙','🍘','🥫','🧆','🧇','🥞','🍳','🥚',
-                        '🍦','🍧','🍨','🍩','🍪','🎂','🍰','🧁','🥧','🍫','🍬','🍭','🍮','🍯',
-                        '🍎','🍏','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🥝','🍒','🍍',
-                        '🥐','🥖','🫓','🥯','🍞',
-                        '☕','🍵','🍺','🍻','🥂','🍷','🍸','🍹','🧉','🧃','🥤','🧋','🥛','🍶',
-                        '❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💖','💗','💓','💞','💕','💘',
-                        '✨','🔥','🌿','🤎','💛'
-                    ];
-                @endphp
-
-                <div style="display:flex; flex-wrap:wrap; gap:10px;">
-                    @foreach($emojis as $emoji)
-                        <span class="emoji-item">{{ $emoji }}</span>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
+      
+ 
         {{-- لوگو --}}
         <div class="col-md-6">
             <label>لوگوی کافه</label>
@@ -96,42 +61,7 @@
         cursor: pointer;
     }
 
-    #emojiPicker {
-        background: white;
-        border-radius: 10px;
-        padding: 10px;
-        position: absolute;
-        width: 260px;
-        max-height: 200px;
-        overflow-y: scroll;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        z-index: 20;
-        display: none;
-    }
+  
 </style>
-
-{{-- جاوااسکریپت --}}
-<script>
-    const emojiInput = document.getElementById("emojiInput");
-    const emojiPicker = document.getElementById("emojiPicker");
-
-    emojiInput.addEventListener("click", () => {
-        emojiPicker.style.display =
-            emojiPicker.style.display === "none" ? "block" : "none";
-    });
-
-    document.querySelectorAll(".emoji-item").forEach(item => {
-        item.addEventListener("click", () => {
-            emojiInput.value = item.textContent.trim();
-            emojiPicker.style.display = "none";
-        });
-    });
-
-    document.addEventListener("click", e => {
-        if (!emojiPicker.contains(e.target) && !emojiInput.contains(e.target)) {
-            emojiPicker.style.display = "none";
-        }
-    });
-</script>
 
 @endsection

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('cafe_name');
             $table->string('cafe_tagline')->nullable();
-            $table->string('coffee_emoji')->default('☕');
             $table->timestamps();
         });
     }

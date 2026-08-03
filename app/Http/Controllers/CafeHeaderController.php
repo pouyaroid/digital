@@ -27,7 +27,6 @@ class CafeHeaderController extends Controller
     $request->validate([
         'cafe_name' => 'required|string|max:255',
         'cafe_tagline' => 'nullable|string|max:255',
-        'coffee_emoji' => 'nullable|string|max:10',
         'logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:2048',
     ]);
 
@@ -53,7 +52,7 @@ class CafeHeaderController extends Controller
         $request->validate([
             'cafe_name' => 'required|string|max:255',
             'cafe_tagline' => 'nullable|string|max:255',
-            'coffee_emoji' => 'nullable|string|max:10',
+            
             'logo' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:2048',
         ]);
     
@@ -61,7 +60,7 @@ class CafeHeaderController extends Controller
     
         $header->cafe_name = $request->cafe_name;
         $header->cafe_tagline = $request->cafe_tagline;
-        $header->coffee_emoji = $request->coffee_emoji;
+       
     
         if ($request->hasFile('logo')) {
             $header->logo = $request->logo->store('cafe/logo', 'public');

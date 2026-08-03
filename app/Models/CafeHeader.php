@@ -8,7 +8,7 @@ class CafeHeader extends Model
 {
     protected $fillable = [
         'cafe_name',
-        'cafe_tagline',
-        'coffee_emoji'
+        'cafe_tagline'
+       
     ];
 }
