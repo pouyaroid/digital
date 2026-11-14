@@ -4,7 +4,7 @@
    THEME VARIABLES — Light (default)
    ═══════════════════════════════════════════ */
 :root {
-    --brand: {{ setting('brand_color', '#FF5722') }};
+    --brand: {{ setting('brand_color', '##2222ff') }};
     --brand-soft:    rgba(255,87,34,0.12);
     --brand-glow:    rgba(255,87,34,0.25);
     --accent:        #FF8A65;
@@ -98,6 +98,36 @@ body {
     color: var(--text-b);
     min-height: 100vh;
     overflow-x: hidden;
+}
+.theme-icon img {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+.search-icon img {
+    width: 20px;
+    height: 20px;
+    display: block;
+    object-fit: contain;
+}
+.footer-row-icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+}
+
+.footer-copy img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+.calorie-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-left: 4px;
 }
 
 /* ═══════════════════════════════════════════

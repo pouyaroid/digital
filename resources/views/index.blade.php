@@ -26,8 +26,15 @@
 
             {{-- دکمه تغییر تم — داخل hero برای موبایل / fixed برای دسکتاپ --}}
             <button id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز/شب">
-                <span class="theme-icon sun">☀️</span>
-                <span class="theme-icon moon">🌙</span>
+
+                <span class="theme-icon sun">
+                    <img src="{{ asset('images/icons/sun.svg') }}" alt="حالت روز">
+                </span>
+            
+                <span class="theme-icon moon">
+                    <img src="{{ asset('images/icons/moon.svg') }}" alt="حالت شب">
+                </span>
+            
             </button>
 
             <div class="hero-logo-ring">
@@ -43,7 +50,10 @@
                 <p class="hero-tagline">{{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}</p>
 
                 <div class="hero-pills">
-                    <span class="hero-pill pill-info">📍 {{ $contact->address ?? 'آدرس ثبت نشده' }}</span>
+                    <span class="hero-pill pill-info">
+                        <img src="{{ asset('images/icons/location.svg') }}" alt="لوکیشن" class="hero-pill-icon">
+                        {{ $contact->address ?? 'آدرس ثبت نشده' }}
+                    </span>
                 </div>
 
                 <div class="hero-actions">
@@ -158,8 +168,11 @@
     {{-- ═══════ SEARCH ═══════ --}}
     <div class="search-wrap">
         <div class="search-glass">
-            <span class="search-icon">🔍</span>
-            <input id="searchInput" class="search-input" type="text" placeholder="جستجو در منو…" autocomplete="off">
+            <span class="search-icon">
+                <img src="{{ asset('images/icons/search.svg') }}" alt="جستجو">
+            </span>
+            <input id="searchInput" class="search-input" type="text"
+                   placeholder="جستجو در منو…" autocomplete="off">
         </div>
     </div>
 
@@ -223,8 +236,11 @@
                         </div>
                     @endif
                     @if($showCalories && $item->calories)
-                        <span class="card-cal">🔥 {{ $item->calories }} کالری</span>
-                    @endif
+                    <span class="card-cal">
+                        <img src="{{ asset('images/icons/fire.svg') }}" alt="" class="calorie-icon">
+                        {{ $item->calories }} کالری
+                    </span>
+                @endif
                 </div>
                 <div class="card-footer">
                     @if($showPrices)
@@ -262,14 +278,39 @@
     {{-- ═══════ FOOTER ═══════ --}}
     <footer id="contact-footer">
         <div class="footer-inner">
-            <div class="footer-brand">{{ $header->cafe_name ?? 'کافه' }} <span>•</span></div>
-            <div class="footer-rows">
-                <div class="footer-row"><span class="footer-row-icon">📍</span><span>{{ $contact->address ?? 'آدرس تعریف نشده' }}</span></div>
-                <div class="footer-row"><span class="footer-row-icon">📞</span><span>{{ $contact->phone ?? 'شماره تعریف نشده' }}</span></div>
-                <div class="footer-row"><span class="footer-row-icon">🕐</span><span>{{ $contact->working_hours ?? 'ساعات کاری تعریف نشده' }}</span></div>
+            <div class="footer-brand">
+                {{ $header->cafe_name ?? 'کافه' }} <span>•</span>
             </div>
+    
+            <div class="footer-rows">
+                <div class="footer-row">
+                    <span class="footer-row-icon">
+                        <img src="{{ asset('images/icons/location.svg') }}" alt="آدرس">
+                    </span>
+                    <span>{{ $contact->address ?? 'آدرس تعریف نشده' }}</span>
+                </div>
+    
+                <div class="footer-row">
+                    <span class="footer-row-icon">
+                        <img src="{{ asset('images/icons/tel.svg') }}" alt="تلفن">
+                    </span>
+                    <span>{{ $contact->phone ?? 'شماره تعریف نشده' }}</span>
+                </div>
+    
+                <div class="footer-row">
+                    <span class="footer-row-icon">
+                        <img src="{{ asset('images/icons/clock.svg') }}" alt="ساعات کاری">
+                    </span>
+                    <span>{{ $contact->working_hours ?? 'ساعات کاری تعریف نشده' }}</span>
+                </div>
+            </div>
+    
             <hr class="footer-sep">
-            <p class="footer-copy">طراحی شده با ❤️</p>
+    
+            <p class="footer-copy">
+                طراحی شده با
+                <img src="{{ asset('images/icons/heart.svg') }}" alt="عشق">
+            </p>
         </div>
     </footer>
 
