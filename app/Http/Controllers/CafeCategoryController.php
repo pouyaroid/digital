@@ -28,6 +28,6 @@ class CafeCategoryController extends Controller
     public function destroy($id){
         $category=CafeCategory::Find($id);
         $category->delete();
-        return redirect()->route('admin.cafe.categories.index');
+        return redirect()->route('admin.categories.index');
     }
 }

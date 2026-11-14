@@ -7,6 +7,7 @@
     <title>{{ 'منو ' . ($header->cafe_name ?? 'کافه بدون نام') }}</title>
     <link rel="stylesheet" href="/dynamic-style.css">
 <base target="_blank">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
@@ -81,8 +82,74 @@
         <div class="cat-nav-glass">
             <button class="nav-btn active" data-category="all">🍽️ همه</button>
             @foreach($categories as $cat)
+                @php
+                    $icon = $cat->icon ?? '';
+    
+                    // رنگ اختصاصی هر آیکن (کلید = کلاس آیکن در دیتابیس)
+                    $colors = [
+                        // غذا
+                        'fa-solid fa-utensils'             => '#f59e0b',
+                        'fa-solid fa-burger'               => '#fb923c',
+                        'fa-solid fa-pizza-slice'          => '#ef4444',
+                        'fa-solid fa-hotdog'               => '#f97316',
+                        'fa-solid fa-drumstick-bite'       => '#d97706',
+                        'fa-solid fa-bacon'                => '#fb7185',
+                        'fa-solid fa-bowl-food'            => '#ea580c',
+                        'fa-solid fa-bowl-rice'            => '#fbbf24',
+                        'fa-solid fa-plate-wheat'          => '#ca8a04',
+                        'fa-solid fa-bread-slice'          => '#eab308',
+                        'fa-solid fa-egg'                  => '#fde047',
+                        'fa-solid fa-cheese'               => '#facc15',
+                        'fa-solid fa-fish'                 => '#38bdf8',
+                        'fa-solid fa-shrimp'               => '#fda4af',
+                        'fa-solid fa-fish-fins'            => '#22d3ee',
+                        'fa-solid fa-pepper-hot'           => '#dc2626',
+                        'fa-solid fa-stroopwafel'          => '#b45309',
+                        'fa-solid fa-mortar-pestle'        => '#92400e',
+                        'fa-solid fa-bell-concierge'       => '#fcd34d',
+                        // میوه و سبزیجات
+                        'fa-solid fa-apple-whole'          => '#f43f5e',
+                        'fa-solid fa-lemon'                => '#facc15',
+                        'fa-solid fa-carrot'               => '#f97316',
+                        'fa-solid fa-leaf'                 => '#4ade80',
+                        'fa-solid fa-seedling'             => '#34d399',
+                        'fa-solid fa-wheat-awn'            => '#ca8a04',
+                        // دسر و شیرینی
+                        'fa-solid fa-ice-cream'            => '#f9a8d4',
+                        'fa-solid fa-cake'                 => '#f472b6',
+                        'fa-solid fa-cake-candles'         => '#ec4899',
+                        'fa-solid fa-cookie'               => '#d99a5b',
+                        'fa-solid fa-cookie-bite'          => '#c47d3b',
+                        'fa-solid fa-candy-cane'           => '#e11d48',
+                        'fa-solid fa-jar'                  => '#fb923c',
+                        // نوشیدنی
+                        'fa-solid fa-mug-hot'              => '#a16207',
+                        'fa-solid fa-mug-saucer'           => '#65a30d',
+                        'fa-solid fa-glass-water'          => '#60a5fa',
+                        'fa-solid fa-bottle-water'         => '#06b6d4',
+                        'fa-solid fa-wine-glass'           => '#be123c',
+                        'fa-solid fa-wine-bottle'          => '#9f1239',
+                        'fa-solid fa-martini-glass-citrus' => '#84cc16',
+                        'fa-solid fa-martini-glass-empty'  => '#2dd4bf',
+                        'fa-solid fa-champagne-glasses'    => '#eab308',
+                        'fa-solid fa-whiskey-glass'        => '#b45309',
+                        'fa-solid fa-beer-mug-empty'       => '#f59e0b',
+                        // عمومی
+                        'fa-solid fa-store'                => '#6366f1',
+                        'fa-solid fa-basket-shopping'      => '#fb923c',
+                        'fa-solid fa-star'                 => '#facc15',
+                        'fa-solid fa-fire'                 => '#f97316',
+                        'fa-solid fa-heart'                => '#ef4444',
+                        'fa-solid fa-gift'                 => '#ec4899',
+                    ];
+                @endphp
                 <button class="nav-btn" data-category="category-{{ $cat->id }}">
-                    {{ $cat->icon ?? '📌' }} {{ $cat->name }}
+                    @if(str_starts_with($icon, 'fa-'))
+                        <i class="{{ $icon }}" style="color: {{ $colors[$icon] ?? '#f59e0b' }};"></i>
+                    @else
+                        {{ $icon !== '' ? $icon : '📌' }}
+                    @endif
+                    {{ $cat->name }}
                 </button>
             @endforeach
         </div>
