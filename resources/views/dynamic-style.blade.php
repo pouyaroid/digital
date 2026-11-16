@@ -4,15 +4,15 @@
    THEME VARIABLES — Light (default)
    ═══════════════════════════════════════════ */
 :root {
-    --brand: {{ setting('brand_color', '##2222ff') }};
+    --brand: {{ setting('brand_color', '#9A5B35') }};
     --brand-soft:    rgba(255,87,34,0.12);
     --brand-glow:    rgba(255,87,34,0.25);
     --accent:        #FF8A65;
 
-    --bg: {{ setting('bg', '#F7F3EE') }};
-    --bg2: {{ setting('bg', '#F7F3EE') }};
-    --surface: {{ setting('surface_color', '#FFFFFF') }};
-    --surface-hover: {{ setting('surface_hover', 'rgba(255,255,255,0.88)') }};
+    --bg: {{ setting('bg', '#F5EFE6') }};
+    --bg2: {{ setting('bg', '#AAA3AA') }};
+    --surface: {{ setting('surface_color', '#EDE0CF') }};
+    --surface-hover: {{ setting('surface_hover', '##AAA3AA') }};
     --surface-solid: #FFFFFF;
     --glass-border: {{ setting('glass_border', 'rgba(255,255,255,0.9)') }};
     --glass-border2: {{ setting('glass_border2', 'rgba(0,0,0,0.06)') }};
@@ -143,9 +143,9 @@ body {
     border-radius: 50%;
     border: 1px solid var(--toggle-border);
     background: var(--toggle-bg);
-    backdrop-filter: blur(20px) saturate(1.8);
-    -webkit-backdrop-filter: blur(20px) saturate(1.8);
-    box-shadow: var(--toggle-shadow);
+    {{-- backdrop-filter: blur(20px) saturate(1.8);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8); --}}
+    {{-- box-shadow: var(--toggle-shadow); --}}
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -195,7 +195,7 @@ body::before {
     position: fixed;
     top: -120px; right: -80px;
     width: 520px; height: 520px;
-    background: radial-gradient(circle, rgba(255,87,34,0.18) 0%, transparent 65%);
+    {{-- background: radial-gradient(circle, rgba(255,87,34,0.18) 0%, transparent 65%); --}}
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -205,7 +205,7 @@ body::after {
     position: fixed;
     bottom: -100px; left: -60px;
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(255,138,101,0.13) 0%, transparent 65%);
+    {{-- background: radial-gradient(circle, rgba(255,138,101,0.13) 0%, transparent 65%); --}}
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -219,6 +219,11 @@ body::after {
 }
 
 /* ══════════════ HERO ══════════════ */
+
+/* ============================
+   HERO HEADER
+============================ */
+
 .hero {
     position: relative;
     z-index: 1;
@@ -227,49 +232,62 @@ body::after {
     margin: 0 auto;
 }
 
+/* Main Container */
 .hero-glass {
     position: relative;
     background: var(--surface);
-    backdrop-filter: blur(24px) saturate(1.6);
-    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    {{-- backdrop-filter: blur(24px) saturate(1.6); --}}
+    {{-- -webkit-backdrop-filter: blur(24px) saturate(1.6); --}}
     border: 1px solid var(--glass-border);
     border-radius: var(--r-2xl);
-    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.8);
-    padding: 28px 32px;
+    {{-- box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.8); --}}
+
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 24px;
+    text-align: center;
+
+    padding: 36px 28px 28px;
+    gap: 0;
 }
 
 [data-theme="dark"] .hero-glass {
     box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
+/* ============================
+   LOGO
+============================ */
+
 .hero-logo-ring {
     flex-shrink: 0;
-    width: 88px; height: 88px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background: var(--brand);
     padding: 3px;
     box-shadow: var(--shadow-brand);
+    margin: 0 auto 18px;
 }
 
 .hero-logo-ring img {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #fff;
 }
 
 .hero-logo-placeholder {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+    {{-- background: linear-gradient(135deg, #FFF3E0, #FFE0B2); --}}
     border: 3px solid #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
+    font-size: 38px;
 }
 
 [data-theme="dark"] .hero-logo-placeholder {
@@ -277,40 +295,73 @@ body::after {
     border-color: rgba(255,255,255,0.15);
 }
 
-.hero-info { flex: 1; }
+/* ============================
+   BRAND INFORMATION
+============================ */
+
+.hero-info {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .hero-name {
-    font-size: clamp(24px, 5vw, 32px);
+    font-size: clamp(24px, 5vw, 34px);
     font-weight: 900;
     color: var(--text-h);
     letter-spacing: -0.8px;
-    line-height: 1.1;
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
 }
 
 .hero-tagline {
     font-size: 14px;
     color: var(--text-m);
-    margin-top: 6px;
+    margin: 5px 0 0;
     font-weight: 400;
+    line-height: 1.9;
+    text-align: center;
 }
+
+/* ============================
+   ADDRESS & CONTACT
+============================ */
 
 .hero-pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+    max-width: 100%;
 }
 
 .hero-pill {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 13px;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 13px;
     border-radius: 50px;
     font-size: 12px;
     font-weight: 600;
+    line-height: 1.8;
+    text-decoration: none;
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
+.hero-pill-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+/* Open Status */
 .pill-open {
     background: var(--green-soft);
     color: #15803D;
@@ -319,16 +370,23 @@ body::after {
 
 .pill-open::before {
     content: '';
-    width: 6px; height: 6px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--green);
     animation: blink 2s infinite;
 }
 
 @keyframes blink {
-    0%,100%{ opacity:1; } 50%{ opacity:0.3; }
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
 }
 
+/* Address & Phone */
 .pill-info {
     background: rgba(255,87,34,0.08);
     color: #B83A15;
@@ -340,6 +398,163 @@ body::after {
     color: #FF8A65;
     border-color: rgba(255,87,34,0.25);
 }
+
+/* ============================
+   SOCIAL & USER ACTIONS
+============================ */
+
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.hero-social-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.hero-icon-btn {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--text-h);
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.hero-icon-btn:hover {
+    color: #fff;
+    background: var(--brand);
+    border-color: var(--brand);
+    transform: translateY(-2px);
+}
+
+.hero-account-btn {
+    min-width: 150px;
+    min-height: 44px;
+    padding: 0 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    color: #fff;
+    background: var(--brand);
+    border: 1px solid var(--brand);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.hero-account-btn:hover {
+    color: #fff;
+    filter: brightness(0.95);
+    transform: translateY(-2px);
+}
+
+.hero-icon-btn svg {
+    display: block;
+}
+
+/* ============================
+   THEME TOGGLE
+============================ */
+
+.theme-toggle {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 5;
+}
+
+/* ============================
+   MOBILE RESPONSIVE
+============================ */
+
+@media (max-width: 600px) {
+
+    .hero {
+        padding: 22px 14px 24px;
+    }
+
+    .hero-glass {
+        padding: 34px 16px 24px;
+        border-radius: var(--r-2xl);
+    }
+
+    .hero-logo-ring {
+        width: 86px;
+        height: 86px;
+        margin-bottom: 14px;
+    }
+
+    .hero-logo-placeholder {
+        font-size: 32px;
+    }
+
+    .hero-name {
+        font-size: 26px;
+        letter-spacing: -0.5px;
+    }
+
+    .hero-tagline {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .hero-pills {
+        margin-top: 15px;
+        gap: 8px;
+    }
+
+    .hero-pill {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .hero-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+    }
+    
+
+    .hero-account-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 19px;
+        border-radius: 50px;
+        background: var(--brand);
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        border: 1px solid var(--brand);
+        transition: all .2s ease;
+    }
+
+    .theme-toggle {
+        top: 12px;
+        left: 12px;
+    }
+}
+
 
 /* ══════════════ STICKY NAV ══════════════ */
 .cat-nav {
@@ -353,8 +568,8 @@ body::after {
     max-width: 1100px;
     margin: 0 auto;
     background: rgba(247,243,238,0.82);
-    backdrop-filter: blur(20px) saturate(1.8);
-    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    {{-- backdrop-filter: blur(20px) saturate(1.8); --}}
+    {{-- -webkit-backdrop-filter: blur(20px) saturate(1.8); --}}
     border: 1px solid rgba(255,255,255,0.85);
     border-radius: var(--r-xl);
     box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.9);
@@ -377,7 +592,7 @@ body::after {
 .nav-btn {
     flex-shrink: 0;
     padding: 8px 18px;
-    border-radius: 50px;
+    border-radius: 20px;
     border: none;
     background: transparent;
     color: var(--text-m);
@@ -390,7 +605,7 @@ body::after {
 }
 
 .nav-btn:hover {
-    background: rgba(255,87,34,0.08);
+    background:var(--bg2);
     color: var(--brand);
 }
 
@@ -521,7 +736,7 @@ body::after {
 
 .card-img-placeholder {
     width: 100%; height: 100%;
-    background: linear-gradient(135deg, #F5EFE6, #EDE0D0);
+    {{-- background: linear-gradient(135deg, #F5EFE6, #EDE0D0); --}}
     display: flex;
     align-items: center;
     justify-content: center;
@@ -875,8 +1090,8 @@ footer {
     position: relative;
     z-index: 1;
     background: var(--surface);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    {{-- backdrop-filter: blur(16px); --}}
+    {{-- -webkit-backdrop-filter: blur(16px); --}}
     border-top: 1px solid rgba(255,255,255,0.7);
     padding: 40px 24px 32px;
 }

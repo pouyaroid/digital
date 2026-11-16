@@ -35,10 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initTheme() {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
+    
+        if (saved === 'dark' || saved === 'light') {
             applyTheme(saved);
         } else {
-            applyTheme(getSystemTheme());
+            applyTheme('light');
         }
     }
 

@@ -21,71 +21,117 @@
     @endphp
 
     {{-- ═══════ HERO ═══════ --}}
-    <header class="hero">
-        <div class="hero-glass">
+    
+<header class="hero">
+    <div class="hero-glass">
 
-            {{-- دکمه تغییر تم — داخل hero برای موبایل / fixed برای دسکتاپ --}}
-            <button id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز/شب">
+        {{-- تغییر تم --}}
+        <button id="themeToggle" class="theme-toggle" aria-label="تغییر حالت روز/شب">
+            <span class="theme-icon sun">
+                <img src="{{ asset('images/icons/sun.svg') }}" alt="حالت روز">
+            </span>
+            <span class="theme-icon moon">
+                <img src="{{ asset('images/icons/moon.svg') }}" alt="حالت شب">
+            </span>
+        </button>
 
-                <span class="theme-icon sun">
-                    <img src="{{ asset('images/icons/sun.svg') }}" alt="حالت روز">
+        {{-- لوگو --}}
+        <div class="hero-logo-ring">
+            @if(!empty($header->logo))
+                <img src="{{ asset('storage/' . $header->logo) }}" alt="لوگو">
+            @else
+                <div class="hero-logo-placeholder">
+                    {{ $header->coffee_emoji ?? '☕' }}
+                </div>
+            @endif
+        </div>
+
+        {{-- اطلاعات برند --}}
+        <div class="hero-info">
+
+            <h1 class="hero-name">
+                {{ $header->cafe_name ?? 'کافه بدون نام' }}
+            </h1>
+
+            <p class="hero-tagline">
+                {{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}
+            </p>
+
+            {{-- اطلاعات تماس --}}
+            <div class="hero-pills">
+
+                <span class="hero-pill pill-info">
+                    <img src="{{ asset('images/icons/location.svg') }}"
+                         alt=""
+                         class="hero-pill-icon">
+                    {{ $contact->address ?? 'آدرس ثبت نشده' }}
                 </span>
-            
-                <span class="theme-icon moon">
-                    <img src="{{ asset('images/icons/moon.svg') }}" alt="حالت شب">
-                </span>
-            
-            </button>
 
-            <div class="hero-logo-ring">
-                @if(!empty($header->logo))
-                    <img src="{{ asset('storage/' . $header->logo) }}" alt="لوگو">
-                @else
-                    <div class="hero-logo-placeholder">{{ $header->coffee_emoji ?? '☕' }}</div>
+                @if(!empty($contact->phone))
+                    <a href="tel:{{ $contact->phone }}" class="hero-pill pill-info">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+                        </svg>
+                        {{ $contact->phone }}
+                    </a>
                 @endif
+
             </div>
 
-            <div class="hero-info">
-                <h1 class="hero-name">{{ $header->cafe_name ?? 'کافه بدون نام' }}</h1>
-                <p class="hero-tagline">{{ $header->cafe_tagline ?? 'توضیحی ثبت نشده است' }}</p>
+            {{-- دکمه‌های ارتباطی --}}
+            <div class="hero-actions">
 
-                <div class="hero-pills">
-                    <span class="hero-pill pill-info">
-                        <img src="{{ asset('images/icons/location.svg') }}" alt="لوکیشن" class="hero-pill-icon">
-                        {{ $contact->address ?? 'آدرس ثبت نشده' }}
-                    </span>
-                </div>
-
-                <div class="hero-actions">
+                <div class="hero-social-actions">
+            
                     @if(!empty($contact->instagram_url))
-                        <a href="{{ $contact->instagram_url }}" target="_blank" class="hero-icon-btn" aria-label="Instagram">
-                            <svg viewBox="0 0 24 24" width="20" height="20">
+                        <a href="{{ $contact->instagram_url }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="hero-icon-btn"
+                           aria-label="اینستاگرام"
+                           title="اینستاگرام">
+                            <svg viewBox="0 0 24 24" width="19" height="19">
                                 <path fill="currentColor" d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5a5 5 0 110 10 5 5 0 010-10zm6-1.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/>
                             </svg>
                         </a>
                     @endif
-                    <a href="#contact-footer" class="hero-icon-btn" aria-label="Contact">
-                        <svg viewBox="0 0 24 24" width="20" height="20">
+            
+                    <a href="#contact-footer"
+                       class="hero-icon-btn"
+                       aria-label="تماس با ما"
+                       title="تماس با ما">
+                        <svg viewBox="0 0 24 24" width="19" height="19">
                             <path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
                         </svg>
                     </a>
-                    @if($isCustomerLoggedIn)
-                        <a href="{{ route('profile.index') }}" class="hero-icon-btn" aria-label="پنل کاربری" title="پنل کاربری">
-                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
-                        </a>
-                    @else
-                        <a href="{{ route('phone.form') }}" class="hero-icon-btn" aria-label="ورود" title="ورود">
-                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                <path fill="currentColor" d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2z"/>
-                            </svg>
-                        </a>
-                    @endif
+            
                 </div>
+            
+                @if($isCustomerLoggedIn)
+                    <a href="{{ route('profile.index') }}"
+                       class="hero-account-btn">
+                        <svg viewBox="0 0 24 24" width="19" height="19">
+                            <path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <span>پنل کاربری</span>
+                    </a>
+                @else
+                    <a href="{{ route('phone.form') }}"
+                       class="hero-account-btn">
+                        <svg viewBox="0 0 24 24" width="19" height="19">
+                            <path fill="currentColor" d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2z"/>
+                        </svg>
+                        <span>ورود</span>
+                    </a>
+                @endif
+            
+            </div>
+
             </div>
         </div>
-    </header>
+    </div>
+</header>
+
 
     {{-- ═══════ CATEGORY NAV ═══════ --}}
     <nav class="cat-nav" id="categoryNav">
