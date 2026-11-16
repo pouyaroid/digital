@@ -524,8 +524,8 @@ select.glass-input option {
 <div class="sidebar" id="sidebar">
     <h4>پنل مدیریت</h4>
     <hr>
-
-    <a href="{{ route('admin.dashboard') }}" class="menu-item">📱 QRCode</a>
+    <a href="{{ route('admin.admin.dashboard') }}" class="menu-item">⚙️داشبرد</a>
+    <a href="{{ route('admin.qrcode') }}" class="menu-item">📱 QRCode</a>
     <a href="{{ route('admin.orders.index') }}" class="menu-item">📋 مشاهده سفارشات</a>
     <a href="{{ route('admin.cafe-header.edit') }}" class="menu-item">📝 ویرایش هدر</a>
     <a href="{{ route('admin.categories.index') }}" class="menu-item">📂 دسته‌بندی‌ها</a>

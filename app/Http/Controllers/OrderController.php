@@ -49,10 +49,10 @@ class OrderController extends Controller
             ], 401);
         }
 
-        // 🔥 گرفتن تنظیمات پرداخت
+        //  گرفتن تنظیمات پرداخت
         $settings = MenuSetting::first();
 
-        // ❌ اگر کل سیستم سفارش بسته باشد
+        //  اگر کل سیستم سفارش بسته باشد
         if (!$settings->cash_payment_enabled && !$settings->online_payment_enabled) {
             return response()->json([
                 'success' => false,
@@ -60,7 +60,7 @@ class OrderController extends Controller
             ], 403);
         }
 
-        // ❌ اگر روش انتخابی غیرفعال باشد
+        //  اگر روش انتخابی غیرفعال باشد
         if (
             ($request->payment_method === 'online' && !$settings->online_payment_enabled) ||
             ($request->payment_method === 'cash' && !$settings->cash_payment_enabled)
@@ -89,7 +89,7 @@ class OrderController extends Controller
                 'note'           => $request->note,
             ]);
 
-            // 📦 آیتم‌ها
+            //  آیتم‌ها
             foreach ($request->cart as $item) {
                 OrderItem::create([
                     'order_id'     => $order->id,
@@ -101,7 +101,7 @@ class OrderController extends Controller
 
             DB::commit();
 
-            // 💳 مسیر پرداخت
+            //  مسیر پرداخت
             if ($request->payment_method === 'online') {
                 return response()->json([
                     'success'  => true,

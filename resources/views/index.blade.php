@@ -136,7 +136,7 @@
     {{-- ═══════ CATEGORY NAV ═══════ --}}
     <nav class="cat-nav" id="categoryNav">
         <div class="cat-nav-glass">
-            <button class="nav-btn active" data-category="all">🍽️ همه</button>
+            <button class="nav-btn active" data-category="all"> همه</button>
             @foreach($categories as $cat)
                 @php
                     $icon = $cat->icon ?? '';

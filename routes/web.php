@@ -14,6 +14,7 @@ use App\Http\Controllers\ContactSectionController;
 use App\Http\Controllers\CafeHeaderController;
 use App\Http\Controllers\CafeCategoryController;
 use App\Http\Controllers\CafeItemController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Auth\PhoneAuthController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -76,7 +77,7 @@ Route::prefix('admin')
     ->middleware('auth')
     ->group(function () {
 
-    Route::get('/', function () {
+    Route::get('/qrcode', function () {
 
         $builder = new Builder(
             writer: new SvgWriter(),
@@ -90,10 +91,10 @@ Route::prefix('admin')
             roundBlockSizeMode: RoundBlockSizeMode::Margin,
         );
 
-        return view('admin.dashboard', [
+        return view('admin.qrCode', [
             'qr' => $builder->build()->getString()
         ]);
-    })->name('dashboard');
+    })->name('qrcode');
 
     // Cafe Header
     Route::get('/cafe-header/edit', [CafeHeaderController::class, 'edit'])->name('cafe-header.edit');
@@ -145,6 +146,8 @@ Route::prefix('admin')
 
     Route::post('/menu-settings', [\App\Http\Controllers\Admin\MenuSettingController::class, 'update'])
         ->name('menu-settings.update');
+    Route::get('/', [DashboardController::class, 'index'])
+        ->name('admin.dashboard');
 });
 
 /*
